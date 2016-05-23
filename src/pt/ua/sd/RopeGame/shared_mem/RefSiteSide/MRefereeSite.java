@@ -1,6 +1,5 @@
-package pt.ua.sd.RopeGame.shared_mem;
+package pt.ua.sd.RopeGame.shared_mem.RefSiteSide;
 
-import pt.ua.sd.RopeGame.active_entities.Referee;
 import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.interfaces.IRefereeSiteCoach;
 import pt.ua.sd.RopeGame.interfaces.IRefereeSiteContestant;

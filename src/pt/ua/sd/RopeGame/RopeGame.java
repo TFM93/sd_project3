@@ -1,14 +1,12 @@
 package pt.ua.sd.RopeGame;
 
-import pt.ua.sd.RopeGame.active_entities.Coach;
-import pt.ua.sd.RopeGame.active_entities.Contestant;
-import pt.ua.sd.RopeGame.active_entities.Referee;
-import pt.ua.sd.RopeGame.interfaces.*;
-import pt.ua.sd.RopeGame.interfaces.*;
-import pt.ua.sd.RopeGame.shared_mem.MContestantsBench;
-import pt.ua.sd.RopeGame.shared_mem.MGeneralInfoRepo;
-import pt.ua.sd.RopeGame.shared_mem.MPlayground;
-import pt.ua.sd.RopeGame.shared_mem.MRefereeSite;
+import pt.ua.sd.RopeGame.active_entities.CoachSide.Coach;
+import pt.ua.sd.RopeGame.active_entities.ContestantSide.Contestant;
+import pt.ua.sd.RopeGame.active_entities.RefereeSide.Referee;
+import pt.ua.sd.RopeGame.shared_mem.BenchSide.MContestantsBench;
+import pt.ua.sd.RopeGame.shared_mem.RepoSide.MGeneralInfoRepo;
+import pt.ua.sd.RopeGame.shared_mem.PlaygroundSide.MPlayground;
+import pt.ua.sd.RopeGame.shared_mem.RefSiteSide.MRefereeSite;
 
 import java.io.FileInputStream;
 import java.io.IOException;

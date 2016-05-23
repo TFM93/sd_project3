@@ -1,9 +1,6 @@
-package pt.ua.sd.RopeGame.shared_mem;
+package pt.ua.sd.RopeGame.shared_mem.PlaygroundSide;
 
 
-import pt.ua.sd.RopeGame.active_entities.Coach;
-import pt.ua.sd.RopeGame.active_entities.Contestant;
-import pt.ua.sd.RopeGame.active_entities.Referee;
 import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundCoach;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundContestant;

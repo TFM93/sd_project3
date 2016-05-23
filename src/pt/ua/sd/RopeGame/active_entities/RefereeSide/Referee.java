@@ -1,4 +1,4 @@
-package pt.ua.sd.RopeGame.active_entities;
+package pt.ua.sd.RopeGame.active_entities.RefereeSide;
 
 
 import pt.ua.sd.RopeGame.enums.RefState;

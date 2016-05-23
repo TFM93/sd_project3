@@ -1,4 +1,4 @@
-package pt.ua.sd.RopeGame.active_entities;
+package pt.ua.sd.RopeGame.active_entities.CoachSide;
 
 import pt.ua.sd.RopeGame.enums.CoachState;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundCoach;

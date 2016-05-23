@@ -1,13 +1,9 @@
-package pt.ua.sd.RopeGame.shared_mem;
+package pt.ua.sd.RopeGame.shared_mem.BenchSide;
 
-import pt.ua.sd.RopeGame.active_entities.Coach;
-import pt.ua.sd.RopeGame.active_entities.Contestant;
-import pt.ua.sd.RopeGame.active_entities.Referee;
 import pt.ua.sd.RopeGame.interfaces.IContestantsBenchCoach;
 import pt.ua.sd.RopeGame.interfaces.IContestantsBenchContestant;
 import pt.ua.sd.RopeGame.interfaces.IContestantsBenchReferee;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 
