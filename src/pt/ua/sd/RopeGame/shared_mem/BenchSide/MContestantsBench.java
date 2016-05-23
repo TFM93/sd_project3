@@ -1,9 +1,11 @@
 package pt.ua.sd.RopeGame.shared_mem.BenchSide;
 
-import pt.ua.sd.RopeGame.interfaces.IContestantsBenchCoach;
-import pt.ua.sd.RopeGame.interfaces.IContestantsBenchContestant;
-import pt.ua.sd.RopeGame.interfaces.IContestantsBenchReferee;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
+import pt.ua.sd.RopeGame.interfaces.BenchInterface;
+import pt.ua.sd.RopeGame.info.Bundle;
 
+
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 
@@ -14,8 +16,8 @@ import java.util.Arrays;
  *
  *
  */
-public class MContestantsBench implements IContestantsBenchContestant, IContestantsBenchCoach, IContestantsBenchReferee {
-
+public class MContestantsBench implements BenchInterface {
+    //Todo- update vector
     /**
      * Internal Data
      */
@@ -64,7 +66,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
     /**
      * Referee calls the trial
      */
-    public synchronized void callTrial()
+    public synchronized Bundle callTrial(VectorTimestamp vectorTimestamp)
     {
 
         /*  wake up coaches in reviewNotes  */
@@ -72,6 +74,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
 
 
         notifyAll();
+        return new Bundle(vectorTimestamp);
 
     }
 
@@ -81,7 +84,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
      * Coach sleeps while the trial was not called or the mach is not started yet and then
      * calls the contestants to play
      */
-    public synchronized boolean callContestants(int team_id,int[] selected_contestants, int n_players)
+    public synchronized Bundle callContestants(int team_id,int[] selected_contestants, int n_players, VectorTimestamp vectorTimestamp)
     {
         /*  if arrays are not initilialized  */
         if (new_team1_selected == null){
@@ -106,7 +109,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
         while(!this.trial_called || this.match_ended){
 
             if(this.match_ended){
-                return false;
+                return new Bundle(vectorTimestamp,false);
             }
 
             try {
@@ -132,7 +135,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
             team2_selected_contestants = selected_contestants;
         }
 
-        return true;
+        return new Bundle(vectorTimestamp,true);
 
     }
 
@@ -141,7 +144,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
      * are playing the trial are waken up. The other ones gain one strength point.
      * @return  true if player is playing and false if he's going to sit down
      */
-    public synchronized boolean[] followCoachAdvice(int contestant_id,int strength, int team_id, int n_players, int n_players_pushing)
+    public synchronized Bundle followCoachAdvice(int contestant_id,int strength, int team_id, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp)
     {
         boolean[] ret =new boolean[2];
         ret[1]=false;//not increment by default
@@ -216,7 +219,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
 
                 if(this.match_ended){
                     ret[0]=false;//return false
-                    return ret;
+                    return new Bundle(vectorTimestamp,ret);
                 }
 
                 if( new_team1_selected[contestant_id] ){
@@ -273,7 +276,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
 
                 if(this.match_ended){
                     ret[1] = false;//not increment by default
-                    return ret;
+                    return new Bundle(vectorTimestamp,ret);
                 }
 
                 if( new_team2_selected[contestant_id] ){
@@ -332,14 +335,14 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
             notifyAll();
         }
         ret[0]=true;
-        return ret;
+        return new Bundle(vectorTimestamp,ret);
     }
 
 
     /**
      * Last coach wakes up referee and sleeps until all the contestants have followed their coache's advice
      */
-    public synchronized void informReferee() {
+    public synchronized Bundle informReferee(VectorTimestamp vectorTimestamp) {
 
         this.n_coaches_informed_referee += 1;
 
@@ -364,13 +367,15 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
             this.n_coaches_trial_decided = 0;
             this.followed_coach_advice = false;
         }
+
+        return new Bundle(vectorTimestamp);
     }
 
 
     /**
      * Referee waits for coaches to inform the referee and then starts trial and wakes up the contestants in bench
     */
-    public synchronized void startTrial()
+    public synchronized Bundle startTrial(VectorTimestamp vectorTimestamp)
     {
 
         /*  wait for coaches to inform referee  */
@@ -384,7 +389,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
         this.coaches_informed = false;
         this.trial_started = true;
         notifyAll();
-
+        return new Bundle(vectorTimestamp);
     }
 
 
@@ -392,7 +397,7 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
      * Contestants sleep until trial is started
      *
      */
-    public synchronized void getReady(int n_players_pushing)
+    public synchronized Bundle getReady(int n_players_pushing, VectorTimestamp vectorTimestamp)
     {
 
         /*  wait for every contestant to be ready  */
@@ -411,6 +416,8 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
             this.n_ready_contestants_started = 0;
             this.trial_started = false;
         }
+
+        return new Bundle(vectorTimestamp);
     }
 
 
@@ -420,17 +427,26 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
      * @param games2 number of games won by team 2
      * @return winner team id
      */
-    public synchronized int declareMatchWinner(int games1, int games2) {
+    public synchronized Bundle declareMatchWinner(int games1, int games2, VectorTimestamp vectorTimestamp) {
 
         this.match_ended = true;
         notifyAll();
         if (games1 > games2) {
-            return 1;
+            return new Bundle(vectorTimestamp,1);
         } else if(games2 > games1){
-            return 2;
+            return new Bundle(vectorTimestamp,2);
         }
-        return 0;
+        return new Bundle(vectorTimestamp,0);
 
     }
 
+    @Override
+    public void terminate() throws RemoteException {
+        //Todo - implement
+    }
+
+    public boolean isClosed() {
+        return false;
+        //Todo - implement
+    }
 }

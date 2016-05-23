@@ -4,9 +4,7 @@ import java.rmi.RemoteException;
 import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
 
-/**
- * Created by ivosilva on 23/05/16.
- */
+
 public interface BenchInterface extends Remote{
 
     Bundle callContestants(int team_id,int[] selected_contestants, int n_players, VectorTimestamp vectorTimestamp) throws RemoteException;
