@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import pt.ua.sd.RopeGame.interfaces.Register;
-
+import pt.ua.sd.RopeGame.interfaces.BenchInterface;
 
 public class BenchServer {
 
@@ -18,9 +18,8 @@ public class BenchServer {
      */
     public static void main(String[] args) {
 
-        if (args.length != 5) {
-            System.out.println("Usage: <registry host name> <registry port number> <port> "
-                    + "<number of contestants> <number of players>");
+        if (args.length != 3) {
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> ");
             System.exit(0);
         }
 
@@ -28,8 +27,6 @@ public class BenchServer {
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
-        int nContestants = Integer.parseInt(args[3]);
-        int nPlayers = Integer.parseInt(args[4]);
 
         // Step 1 - Get Repository remote object
 
