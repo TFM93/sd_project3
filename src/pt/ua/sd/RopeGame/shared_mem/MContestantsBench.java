@@ -62,8 +62,8 @@ public class MContestantsBench implements IContestantsBenchContestant, IContesta
     private boolean match_ended = false;//flag for match ended, true if ended
 
     /*  array to know if the players are playing  */
-    boolean playing1[];
-    boolean playing2[];
+    private boolean playing1[];
+    private boolean playing2[];
 
     /**
      * Referee calls the trial

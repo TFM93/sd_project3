@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 /**
- * Main class of the project<br>
+ * Main class of the project ROPE GAME <br>
  *  Created by tiago and ivosilva on 25-03-2016.<br>
  * <b><center><font size=6>Main class of the project</font></center></b><br>
  *  <b><center><font size=5>This class represents the main class of the project, is in this class that the shared memories are created and the threads launched.</font></center></b><br>

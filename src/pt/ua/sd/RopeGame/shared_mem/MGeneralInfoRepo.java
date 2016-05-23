@@ -304,6 +304,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
                     for (int i = 0; i < players_pushing; i++){
                         if (contestants_team1[i] == -1){
                             contestants_team1[i] = id;
+                            break;
                         }
                     }
 
@@ -316,6 +317,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
                     for (int i = 0; i < players_pushing; i++){
                         if (contestants_team2[i] == -1){
                             contestants_team2[i] = id;
+                            break;
                         }
                     }
                 }
@@ -342,7 +344,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
     /**
      * buffers the states in current moment for each entity
      */
-    public synchronized void printStates(){
+    private synchronized void printStates(){
 
         TO_WRITE += String.format("%s   %s %s %02d %s %02d %s %02d %s %02d %s %02d   %s %s %02d %s %02d %s %02d %s %02d %s %02d %s %s %s . %s %s %s %s %s\n",
                 referee_state,
