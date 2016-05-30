@@ -2,10 +2,11 @@ package pt.ua.sd.RopeGame.active_entities.ContestantSide;
 
 
 import pt.ua.sd.RopeGame.enums.ContestantState;
-import pt.ua.sd.RopeGame.interfaces.IContestantsBenchContestant;
-import pt.ua.sd.RopeGame.interfaces.IPlaygroundContestant;
-import pt.ua.sd.RopeGame.interfaces.IRefereeSiteContestant;
-import pt.ua.sd.RopeGame.interfaces.IRepoContestant;
+import pt.ua.sd.RopeGame.info.Bundle;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
+import pt.ua.sd.RopeGame.interfaces.*;
+
+import java.rmi.RemoteException;
 
 
 /**
@@ -27,15 +28,16 @@ public class Contestant extends Thread {
     private int id;//represents the id of the coach
     private int team_id;//represents the id of the team
     private int strength;//represents the strenght of the current player
-    private IContestantsBenchContestant contestants_bench;//represents the bench shared memory
-    private IRefereeSiteContestant referee_site;//represents the referee site shared memory
-    private IPlaygroundContestant playground;//represents the playground shared memory
-    private IRepoContestant repo;//represents the general info repository of shared memory
+    private BenchInterface contestants_bench;//represents the bench shared memory
+    private RefereeSiteInterface referee_site;//represents the referee site shared memory
+    private PlaygroundInterface playground;//represents the playground shared memory
+    private RepoInterface repo;//represents the general info repository of shared memory
     private int n_players;//number of players in each team, defined in rg.config
     private int n_players_pushing;//number of players in each team pushing at any given trial, defined in rg.config
     private int n_trials;//number of trials, defined in rg.config
     private int n_games;//number of games, defined in rg.config
     private int knockDif;//number of knockout difference needed to win, defined in rg.config
+    private final VectorTimestamp vectorTimestamp;
 
 
     /**
@@ -49,12 +51,12 @@ public class Contestant extends Thread {
      * @param repo general info repository shared memory instancy
      */
     public Contestant(int id, int team_id, int strength,
-                      IPlaygroundContestant playground,
-                      IRefereeSiteContestant referee_site,
-                      IContestantsBenchContestant contestants_bench,
-                      IRepoContestant repo,
+                      PlaygroundInterface playground,
+                      RefereeSiteInterface referee_site,
+                      BenchInterface contestants_bench,
+                      RepoInterface repo,
                       int n_players, int n_players_pushing,
-                      int n_trials, int n_games, int knockDif){
+                      int n_trials, int n_games, int knockDif, int vectorTimestampId, int nEntities){
         this.id = id;
         this.team_id = team_id;
         this.strength = strength;
@@ -67,6 +69,7 @@ public class Contestant extends Thread {
         this.n_trials = n_trials;
         this.n_games = n_games;
         this.knockDif = knockDif;
+        this.vectorTimestamp = new VectorTimestamp(vectorTimestampId, nEntities);
     }
 
     /**
@@ -80,40 +83,83 @@ public class Contestant extends Thread {
         unpack[1]=false;//def
         boolean match_not_over = true;
 
+        Bundle bundle;
 
         while (match_not_over){//this value can change when contestant is in the begining of his cycle(SAB) by followCoachAdvice()
             switch (state){
 
                 case SEAT_AT_THE_BENCH:
-                    repo.updtRopeCenter(Integer.MAX_VALUE);//update central info repository the MAX_VALUE hides the log value
-                    unpack = contestants_bench.followCoachAdvice(this.id,this.strength,this.team_id, this.n_players, this.n_players_pushing);
-                    match_not_over = unpack[0];
-                    if(unpack[1])
-                    {
-                        incrementStrength();
+                    try {
+                        repo.updtRopeCenter(Integer.MAX_VALUE, vectorTimestamp);//update central info repository the MAX_VALUE hides the log value
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                    if(!match_not_over){
-                        break;
+                    try {
+                        bundle = contestants_bench.followCoachAdvice(this.id,this.strength,this.team_id, this.n_players, this.n_players_pushing, vectorTimestamp);
+                        unpack = (boolean[]) bundle.getValue();
+                        match_not_over = unpack[0];
+                        if(unpack[1])
+                        {
+                            incrementStrength();
+                        }
+                        if(!match_not_over){
+                            break;
+                        }
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
+
                     state = ContestantState.STAND_IN_POSITION;//change state
-                    repo.contestantLog(this.id, this.team_id, this.strength, state);//update central info repository
+                    try {
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case STAND_IN_POSITION:
-                    contestants_bench.getReady(n_players_pushing);
+                    try {
+                        contestants_bench.getReady(n_players_pushing, vectorTimestamp);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     state = ContestantState.DO_YOUR_BEST;//change state
-                    repo.contestantLog(this.id, this.team_id, this.strength, state);//update central info repository
+                    try {
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case DO_YOUR_BEST:
-                    playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players);
-                    repo.contestantLog(this.id, this.team_id, this.strength, state);//update central info repository
-                    playground.iAmDone(n_players_pushing);
+                    try {
+                        playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, vectorTimestamp);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        playground.iAmDone(n_players_pushing, vectorTimestamp);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     decrementStrength();//depois de am done decrementar a forca
-                    playground.seatDown(n_players_pushing);
+                    try {
+                        playground.seatDown(n_players_pushing, vectorTimestamp);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     state = ContestantState.START;//change state
                     break;
                 default:
                     state = ContestantState.SEAT_AT_THE_BENCH;//change state
-                    repo.contestantLog(this.id, this.team_id, this.strength, state);//update central info repository
+                    try {
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
