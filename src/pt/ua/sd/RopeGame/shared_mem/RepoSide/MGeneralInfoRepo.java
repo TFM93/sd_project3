@@ -54,6 +54,7 @@ public class MGeneralInfoRepo implements RepoInterface{
     private static int[] team2_strength;//strenght of each contestant
     private static int game_nr;//number of the game
     private static File OUTPUT_FILE;//represents the log file
+    private static File OUTPUT_FILE_ORDERED;//represents the log file
     private String TO_WRITE;//info that needs to be saved to file
     private static Writer output=null;
 
@@ -75,9 +76,8 @@ public class MGeneralInfoRepo implements RepoInterface{
      * @param players_team number of players per team
      * @param players_pushing number of players pushing the rope
      */
-   public MGeneralInfoRepo(int players_team, int players_pushing) {
+    MGeneralInfoRepo(int players_team, int players_pushing) {
        statesList = new ArrayList<>();
-
         this.players_pushing = players_pushing;
 
 
@@ -92,13 +92,18 @@ public class MGeneralInfoRepo implements RepoInterface{
         }
 
         String LOG_LOCATION = "RopeGame.log";
-        TO_WRITE = "";
+       String LOG_LOCATION_ORDERED = "RopeGameBubbleSorted.log";
         TO_WRITE="";//nothing needs to be written now
         OUTPUT_FILE = new File(LOG_LOCATION);
+       OUTPUT_FILE_ORDERED = new File(LOG_LOCATION_ORDERED);
         if(OUTPUT_FILE.exists())//check if the file exists
         {
             deleteFile();//and delete it
         }
+       if(OUTPUT_FILE_ORDERED.exists())//check if the file exists
+       {
+           deleteBubbleSortedFile();//and delete it
+       }
         game_nr = 0;//reset game nr
         referee_state = refStates.NON;
         coach_state = new coachStates[2];
@@ -145,6 +150,7 @@ public class MGeneralInfoRepo implements RepoInterface{
                     " \nRef Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5     Trial    \n" +
                     "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n";
             //System.out.printf(temp);
+            statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
             TO_WRITE += temp;
         }
         //return new Bundle(vectorTimestamp);
@@ -155,7 +161,7 @@ public class MGeneralInfoRepo implements RepoInterface{
      * Function responsible to add the header to the log
      * @param first if true prints to file only the initial header, if false also prints the game number
      */
-    public synchronized void AddheaderInternal(boolean first)
+    public synchronized String AddheaderInternal(boolean first)
     {
         String temp;//temporary string
 
@@ -166,6 +172,7 @@ public class MGeneralInfoRepo implements RepoInterface{
                     "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n";
             //System.out.printf(temp);
             TO_WRITE += temp;
+            return temp;
         }
         else {
             // game_nr +=1;
@@ -174,6 +181,7 @@ public class MGeneralInfoRepo implements RepoInterface{
                     "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n";
             //System.out.printf(temp);
             TO_WRITE += temp;
+            return temp;
         }
 
     }
@@ -196,8 +204,9 @@ public class MGeneralInfoRepo implements RepoInterface{
                 coach_state[team_id - 1] = coachStates.WTR;
                 break;
         }
+        String temp = printStates();
 
-        printStates();
+        statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
         //return new Bundle(vectorTimestamp);
 
     }
@@ -242,6 +251,7 @@ public class MGeneralInfoRepo implements RepoInterface{
         }
 
         TO_WRITE += temp;// buffers the added info to be writen in future
+        statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
         writeToFile();//write the TO_WRITE buffer to file
         //return new Bundle(vectorTimestamp);
 
@@ -265,10 +275,16 @@ public class MGeneralInfoRepo implements RepoInterface{
             temp="Match was draw.\n";
         }
         TO_WRITE += temp;//buffers the info
+        statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
+
         writeToFile();//writes the text present in buffer
+        //this function is called on the end so now we can order the timestamps and print the messages
+        mySort();
+        writeToFileOrdered();
         //return new Bundle(vectorTimestamp);
 
     }
+
 
     /**
      * Logs the referee changes and prints to the file
@@ -305,7 +321,8 @@ public class MGeneralInfoRepo implements RepoInterface{
                 break;
         }
 
-        printStates();//buffers the states
+        String temp = printStates();//buffers the states
+        statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
         writeToFile();//writes the buffer to file
         //return new Bundle(vectorTimestamp);
 
@@ -385,7 +402,8 @@ public class MGeneralInfoRepo implements RepoInterface{
                 break;
         }
 
-        printStates();//buffers the changes
+        String temp = printStates();//buffers the changes
+        statesList.add(new logLine(vectorTimestamp.getVectorTimestampArray(),temp));
         writeToFile();//writes the changes
         //return new Bundle(vectorTimestamp);
     }
@@ -393,9 +411,9 @@ public class MGeneralInfoRepo implements RepoInterface{
     /**
      * buffers the states in current moment for each entity
      */
-    private synchronized void printStates(){
+    private synchronized String printStates(){
 
-        TO_WRITE += String.format("%s   %s %s %02d %s %02d %s %02d %s %02d %s %02d   %s %s %02d %s %02d %s %02d %s %02d %s %02d %s %s %s . %s %s %s %s %s\n",
+        String temp = String.format("%s   %s %s %02d %s %02d %s %02d %s %02d %s %02d   %s %s %02d %s %02d %s %02d %s %02d %s %02d %s %s %s . %s %s %s %s %s\n",
                 referee_state,
                 coach_state[0],
                 team1_state[0],
@@ -427,6 +445,8 @@ public class MGeneralInfoRepo implements RepoInterface{
                 (contestants_team2[2] != -1) ? String.format("%01d", contestants_team2[2]+1) : "-",
                 (referee_trial_number != 0) ? String.format("%02d", referee_trial_number) : "--",
                 (PS_center != Integer.MAX_VALUE) ? String.format("%02d", PS_center) : "--");
+        TO_WRITE += temp;
+        return temp;
 
     }
 
@@ -462,6 +482,32 @@ public class MGeneralInfoRepo implements RepoInterface{
         }
     }
 
+    private void writeToFileOrdered() {
+
+        try {
+            output = new BufferedWriter(new FileWriter(OUTPUT_FILE,true));
+            //FileWriter always assumes default encoding is OK!
+            output.write("                               Game of the Rope - Description of the internal state" +
+                    "\n\n" +
+                    "Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5     Trial    \n" +
+                    "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n");
+
+            for (logLine aStatesList : statesList) {
+
+                output.write(aStatesList.getMessage());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (output != null) try {
+                output.close();
+            } catch (IOException ignore) {}
+        }
+    }
+
+
+
     /**
      * deletes the RopeGame.log file
      */
@@ -473,6 +519,23 @@ public class MGeneralInfoRepo implements RepoInterface{
             System.err.format("%s: no such" + " file or directory%n", OUTPUT_FILE.toPath());
         } catch (DirectoryNotEmptyException x) {
             System.err.format("%s not empty%n", OUTPUT_FILE.toPath());
+        } catch (IOException x) {
+            // File permission problems are caught here.
+            System.err.println(x.toString());
+        }
+    }
+
+    /**
+     * deletes the RopeGameBubbleSorted.log file
+     */
+    private void deleteBubbleSortedFile()
+    {
+        try {
+            Files.delete(OUTPUT_FILE_ORDERED.toPath());
+        } catch (NoSuchFileException x) {
+            System.err.format("%s: no such" + " file or directory%n", OUTPUT_FILE_ORDERED.toPath());
+        } catch (DirectoryNotEmptyException x) {
+            System.err.format("%s not empty%n", OUTPUT_FILE_ORDERED.toPath());
         } catch (IOException x) {
             // File permission problems are caught here.
             System.err.println(x.toString());

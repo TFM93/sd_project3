@@ -6,8 +6,6 @@ import java.util.Arrays;
  * This data type implements a vector timestamp.
  * Contains the vectors timestamp of all active entities
  *
- * @author André Santos (<a href="mailto:andre.jeronimo@ua.pt">andre.jeronimo@ua.pt</a>)
- * @author André Marques (<a href="mailto:marques.andre@ua.pt">marques.andre@ua.pt</a>)
  */
 public class VectorTimestamp implements VectorTimestampInterface {
 
