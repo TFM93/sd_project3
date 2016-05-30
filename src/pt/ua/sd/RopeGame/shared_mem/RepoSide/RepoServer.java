@@ -45,7 +45,7 @@ public class RepoServer {
         System.out.println("Security manager was created and installed!");
 
         /* instantiate a remote object that runs mobile code and generate a stub for it */
-        MGeneralInfoRepo repo = new MGeneralInfoRepo(playersPerTeam,playersPushing,0,0,0);
+        MGeneralInfoRepo repo = new MGeneralInfoRepo(playersPerTeam,playersPushing);
         RepoInterface repoStub = null;
         //int listeningPort = 22214;                            /* it should be set accordingly in each case */
 

@@ -71,7 +71,7 @@ public class MPlayground implements PlaygroundInterface {
             this.n_contestants_done_awake = 0;
             this.trial_decided_contestants = false;
         }
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
     }
 
 
@@ -124,7 +124,7 @@ public class MPlayground implements PlaygroundInterface {
                 this.finished_pushing = 0;
                 this.push_at_all_force = false;
             }
-            return new Bundle(vectorTimestamp);
+            return new Bundle(localVectorTimestamp.clone());
 
         }
         else if (team_id == 2){
@@ -143,10 +143,10 @@ public class MPlayground implements PlaygroundInterface {
                 this.push_at_all_force = false;
             }
 
-            return new Bundle(vectorTimestamp);
+            return new Bundle(localVectorTimestamp.clone());
 
         }
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
 
     }
 
@@ -214,7 +214,7 @@ public class MPlayground implements PlaygroundInterface {
             decision=true;
         }
 
-        return new Bundle(vectorTimestamp,new TrialStat(decision,winner, decision_type, center_rope));
+        return new Bundle(localVectorTimestamp.clone(),new TrialStat(decision,winner, decision_type, center_rope));
     }
 
     /**
@@ -250,7 +250,7 @@ public class MPlayground implements PlaygroundInterface {
             this.trial_decided_coach = false;
         }
 
-        return new Bundle(vectorTimestamp, selected_contestants);
+        return new Bundle(localVectorTimestamp.clone(), selected_contestants);
     }
 
 
@@ -268,7 +268,7 @@ public class MPlayground implements PlaygroundInterface {
             this.contestants_are_done = true;
             notifyAll();
         }
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
 
     }
 

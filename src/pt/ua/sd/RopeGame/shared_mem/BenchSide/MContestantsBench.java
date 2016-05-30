@@ -84,7 +84,7 @@ public class MContestantsBench implements BenchInterface {
 
 
         notifyAll();
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
 
     }
 
@@ -121,7 +121,7 @@ public class MContestantsBench implements BenchInterface {
         while(!this.trial_called || this.match_ended){
 
             if(this.match_ended){
-                return new Bundle(vectorTimestamp,false);
+                return new Bundle(localVectorTimestamp.clone(),false);
             }
 
             try {
@@ -147,7 +147,7 @@ public class MContestantsBench implements BenchInterface {
             team2_selected_contestants = selected_contestants;
         }
 
-        return new Bundle(vectorTimestamp,true);
+        return new Bundle(localVectorTimestamp.clone(),true);
 
     }
 
@@ -234,7 +234,7 @@ public class MContestantsBench implements BenchInterface {
 
                 if(this.match_ended){
                     ret[0]=false;//return false
-                    return new Bundle(vectorTimestamp,ret);
+                    return new Bundle(localVectorTimestamp.clone(),ret);
                 }
 
                 if( new_team1_selected[contestant_id] ){
@@ -291,7 +291,7 @@ public class MContestantsBench implements BenchInterface {
 
                 if(this.match_ended){
                     ret[1] = false;//not increment by default
-                    return new Bundle(vectorTimestamp,ret);
+                    return new Bundle(localVectorTimestamp.clone(),ret);
                 }
 
                 if( new_team2_selected[contestant_id] ){
@@ -350,7 +350,7 @@ public class MContestantsBench implements BenchInterface {
             notifyAll();
         }
         ret[0]=true;
-        return new Bundle(vectorTimestamp,ret);
+        return new Bundle(localVectorTimestamp.clone(),ret);
     }
 
 
@@ -385,7 +385,7 @@ public class MContestantsBench implements BenchInterface {
             this.followed_coach_advice = false;
         }
 
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
     }
 
 
@@ -406,7 +406,7 @@ public class MContestantsBench implements BenchInterface {
         this.coaches_informed = false;
         this.trial_started = true;
         notifyAll();
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
     }
 
 
@@ -434,7 +434,7 @@ public class MContestantsBench implements BenchInterface {
             this.trial_started = false;
         }
 
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
     }
 
 
@@ -452,11 +452,11 @@ public class MContestantsBench implements BenchInterface {
         this.match_ended = true;
         notifyAll();
         if (games1 > games2) {
-            return new Bundle(vectorTimestamp,1);
+            return new Bundle(localVectorTimestamp.clone(),1);
         } else if(games2 > games1){
-            return new Bundle(vectorTimestamp,2);
+            return new Bundle(localVectorTimestamp.clone(),2);
         }
-        return new Bundle(vectorTimestamp,0);
+        return new Bundle(localVectorTimestamp.clone(),0);
 
     }
 

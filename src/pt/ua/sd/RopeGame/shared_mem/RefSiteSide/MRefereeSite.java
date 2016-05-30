@@ -19,7 +19,14 @@ import java.rmi.RemoteException;
  *
  */
 public class MRefereeSite implements RefereeSiteInterface{
+    /**
+     * @serialField localVectorTimestamp
+     */
+    private final VectorTimestamp localVectorTimestamp;
 
+    public MRefereeSite(int nEntities){
+        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+    }
 
     /**
      *
@@ -28,7 +35,7 @@ public class MRefereeSite implements RefereeSiteInterface{
     public Bundle getN_games_played(VectorTimestamp vectorTimestamp) throws RemoteException {
         updVectorTimestamp(vectorTimestamp);//update vector
 
-        return  new Bundle(localvectorTimestamp, n_games_played);
+        return  new Bundle(localVectorTimestamp.clone(), n_games_played);
     }
 
     /**
@@ -44,7 +51,7 @@ public class MRefereeSite implements RefereeSiteInterface{
     public synchronized Bundle announceNewGame(VectorTimestamp vectorTimestamp) throws RemoteException {
         updVectorTimestamp(vectorTimestamp);//update vector
 
-        return new Bundle(vectorTimestamp);
+        return new Bundle(localVectorTimestamp.clone());
     }
 
     /**
@@ -58,23 +65,23 @@ public class MRefereeSite implements RefereeSiteInterface{
 
         if(knock_out== 1 )
         {
-            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
+            return new Bundle(localVectorTimestamp.clone(),new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
         }
         else if(knock_out == 2){
 
-            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
+            return new Bundle(localVectorTimestamp.clone(),new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
         }
         else if(score_T1>score_T2)
         {
 
-            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),1,WonType.POINTS));
+            return new Bundle(localVectorTimestamp.clone(),new GameStat((n_games_played<n_games),1,WonType.POINTS));
         }
         else if(score_T1<score_T2){
 
-            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),2,WonType.POINTS));
+            return new Bundle(localVectorTimestamp.clone(),new GameStat((n_games_played<n_games),2,WonType.POINTS));
         }
 
-        return new Bundle(vectorTimestamp, new GameStat((n_games_played<n_games),0,WonType.DRAW));
+        return new Bundle(localVectorTimestamp.clone(), new GameStat((n_games_played<n_games),0,WonType.DRAW));
 
     }
 
@@ -87,4 +94,10 @@ public class MRefereeSite implements RefereeSiteInterface{
         return false;
         //Todo - implement
     }
+
+    private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
+
+    }
 }
+

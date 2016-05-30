@@ -69,7 +69,7 @@ public class MGeneralInfoRepo implements RepoInterface{
      * @param n_games number of games
      * @param knockDif maximum diference to the rope center to reach a knockout
      */
-   public MGeneralInfoRepo(int players_team, int players_pushing, int n_trials, int n_games, int knockDif) {
+   public MGeneralInfoRepo(int players_team, int players_pushing) {
         this.players_pushing = players_pushing;
 
 
