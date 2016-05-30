@@ -18,8 +18,8 @@ public class BenchServer {
      */
     public static void main(String[] args) {
 
-        if (args.length != 3) {
-            System.out.println("Usage: <registry host name> <registry port number> <listening port> ");
+        if (args.length != 4) {
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players>");
             System.exit(0);
         }
 
@@ -27,6 +27,8 @@ public class BenchServer {
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
+        int nPlayers = Integer.parseInt(args[3]);
+        int nEntities = 3 + nPlayers + 3;//number of players plus both coaches and an referee. the last sum is referred to the shared memories
 
         // Step 1 - Get Repository remote object
 
@@ -50,7 +52,7 @@ public class BenchServer {
         System.out.println("Security manager was created and installed!");
 
         /* instantiate a remote object that runs mobile code and generate a stub for it */
-        MContestantsBench bench = new MContestantsBench();
+        MContestantsBench bench = new MContestantsBench(nEntities);
         BenchInterface benchStub = null;
         //int listeningPort = 22214;                            /* it should be set accordingly in each case */
 

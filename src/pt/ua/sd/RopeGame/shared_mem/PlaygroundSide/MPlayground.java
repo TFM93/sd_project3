@@ -38,13 +38,24 @@ public class MPlayground implements PlaygroundInterface {
     private boolean trial_decided_contestants = false;
     private boolean contestants_are_done = false;
     private int n_contestants_done = 0;
+    /**
+     * local vectorial clock
+     * @serialField localVectorTimestamp
+     */
+    private VectorTimestamp localVectorTimestamp;
 
+
+    public MPlayground(int nEntities){
+
+        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+    }
 
     /**
      * Have contestants wait for the trial decision to change their state into SEAT_AT_THE_BENCH
      */
-    public synchronized Bundle seatDown(int n_players_pushing, VectorTimestamp vectorTimestamp)
+    public synchronized Bundle seatDown(int n_players_pushing, VectorTimestamp vectorTimestamp) throws RemoteException
     {
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         while (!this.trial_decided_contestants){
             try {
@@ -67,7 +78,8 @@ public class MPlayground implements PlaygroundInterface {
     /**
      * Contestants wait until they are all in position to pull the rope and, only then, will they start pulling
      */
-    public synchronized Bundle pullTheRope(int team_id, int strenght, int contestant_id, int n_players_pushing, int n_players, VectorTimestamp vectorTimestamp) {
+    public synchronized Bundle pullTheRope(int team_id, int strenght, int contestant_id, int n_players_pushing, int n_players, VectorTimestamp vectorTimestamp) throws RemoteException {
+        updVectorTimestamp(vectorTimestamp);//update vector
         this.ready_to_push += 1;
 
         if(n_contestant_pulls_team1 == null){
@@ -143,7 +155,10 @@ public class MPlayground implements PlaygroundInterface {
      * The referee waits until the contestants are done pulling the rope and the asserts the trial winner
      * @return trial_stats
      */
-    public synchronized Bundle assertTrialDecision(int n_players_pushing, int knockDif, VectorTimestamp vectorTimestamp) {
+    public synchronized Bundle assertTrialDecision(int n_players_pushing, int knockDif, VectorTimestamp vectorTimestamp) throws RemoteException {
+
+
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         boolean decision = false;
         WonType decision_type = WonType.NONE;
@@ -208,7 +223,8 @@ public class MPlayground implements PlaygroundInterface {
      * @param selected_contestants selected contestants in current trial
      * @return selected_contestant_for_next_trial
      */
-    public synchronized Bundle reviewNotes(int[] selected_contestants, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp) {
+    public synchronized Bundle reviewNotes(int[] selected_contestants, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp) throws RemoteException {
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         while (!this.trial_decided_coach){
             try {
@@ -241,7 +257,9 @@ public class MPlayground implements PlaygroundInterface {
     /**
      * Contestants are done pulling the rope
      */
-    public synchronized Bundle iAmDone(int n_players_pushing, VectorTimestamp vectorTimestamp){
+    public synchronized Bundle iAmDone(int n_players_pushing, VectorTimestamp vectorTimestamp) throws RemoteException{
+        updVectorTimestamp(vectorTimestamp);//update vector
+
         this.n_contestants_done += 1;
 
         /*  last contestant done wakes up referee  */
@@ -263,7 +281,10 @@ public class MPlayground implements PlaygroundInterface {
         return false;
         //Todo - implement
     }
+    private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
 
+    }
 
 }
 

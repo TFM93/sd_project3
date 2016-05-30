@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class PlaygroundServer {
     public static void main(String[] args){
         if (args.length != 3) {
-            System.out.println("Usage: <registry host name> <registry port number> <listening port> ");
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players>");
             System.exit(0);
         }
 
@@ -23,7 +23,8 @@ public class PlaygroundServer {
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
-
+        int nPlayers = Integer.parseInt(args[3]);
+        int nEntities = 3+ nPlayers +3;
         /* look for the remote object by name in the remote host registry */
         Registry registry = null;
 
@@ -42,7 +43,7 @@ public class PlaygroundServer {
         System.out.println("Security manager was created and installed!");
 
         /* instantiate a remote object that runs mobile code and generate a stub for it */
-        MPlayground playground = new MPlayground();
+        MPlayground playground = new MPlayground(nEntities);
         PlaygroundInterface playgStub = null;
         //int listeningPort = 22214;                            /* it should be set accordingly in each case */
 

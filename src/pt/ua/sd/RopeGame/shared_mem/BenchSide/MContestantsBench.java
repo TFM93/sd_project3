@@ -62,12 +62,22 @@ public class MContestantsBench implements BenchInterface {
     /*  array to know if the players are playing  */
     private boolean playing1[];
     private boolean playing2[];
+    /**
+     * Vector timestamp
+     * @serialField localVectorTimestamp
+     */
+    private final VectorTimestamp localVectorTimestamp;
+
+    public MContestantsBench(int nEntities){
+        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+    }
 
     /**
      * Referee calls the trial
      */
     public synchronized Bundle callTrial(VectorTimestamp vectorTimestamp) throws RemoteException
     {
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         /*  wake up coaches in reviewNotes  */
         this.trial_called = true;
@@ -84,8 +94,10 @@ public class MContestantsBench implements BenchInterface {
      * Coach sleeps while the trial was not called or the mach is not started yet and then
      * calls the contestants to play
      */
-    public synchronized Bundle callContestants(int team_id,int[] selected_contestants, int n_players, VectorTimestamp vectorTimestamp)
+    public synchronized Bundle callContestants(int team_id,int[] selected_contestants, int n_players, VectorTimestamp vectorTimestamp) throws RemoteException
     {
+        updVectorTimestamp(vectorTimestamp);//update vector
+
         /*  if arrays are not initilialized  */
         if (new_team1_selected == null){
             new_team1_selected = new boolean[n_players];
@@ -144,8 +156,11 @@ public class MContestantsBench implements BenchInterface {
      * are playing the trial are waken up. The other ones gain one strength point.
      * @return  true if player is playing and false if he's going to sit down
      */
-    public synchronized Bundle followCoachAdvice(int contestant_id,int strength, int team_id, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp)
+    public synchronized Bundle followCoachAdvice(int contestant_id,int strength, int team_id, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp) throws RemoteException
     {
+
+        updVectorTimestamp(vectorTimestamp);//update vector
+
         boolean[] ret =new boolean[2];
         ret[1]=false;//not increment by default
         ret[0]=false;//return false by default
@@ -342,7 +357,9 @@ public class MContestantsBench implements BenchInterface {
     /**
      * Last coach wakes up referee and sleeps until all the contestants have followed their coache's advice
      */
-    public synchronized Bundle informReferee(VectorTimestamp vectorTimestamp) {
+    public synchronized Bundle informReferee(VectorTimestamp vectorTimestamp) throws RemoteException {
+
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         this.n_coaches_informed_referee += 1;
 
@@ -375,9 +392,9 @@ public class MContestantsBench implements BenchInterface {
     /**
      * Referee waits for coaches to inform the referee and then starts trial and wakes up the contestants in bench
     */
-    public synchronized Bundle startTrial(VectorTimestamp vectorTimestamp)
+    public synchronized Bundle startTrial(VectorTimestamp vectorTimestamp) throws RemoteException
     {
-
+        updVectorTimestamp(vectorTimestamp);//update vector
         /*  wait for coaches to inform referee  */
         while (!this.coaches_informed){
             try {
@@ -397,9 +414,9 @@ public class MContestantsBench implements BenchInterface {
      * Contestants sleep until trial is started
      *
      */
-    public synchronized Bundle getReady(int n_players_pushing, VectorTimestamp vectorTimestamp)
+    public synchronized Bundle getReady(int n_players_pushing, VectorTimestamp vectorTimestamp) throws RemoteException
     {
-
+        updVectorTimestamp(vectorTimestamp);//update vector
         /*  wait for every contestant to be ready  */
         /*  the last contestant to get ready wakes up everyone else  */
         while (!this.trial_started){
@@ -427,7 +444,10 @@ public class MContestantsBench implements BenchInterface {
      * @param games2 number of games won by team 2
      * @return winner team id
      */
-    public synchronized Bundle declareMatchWinner(int games1, int games2, VectorTimestamp vectorTimestamp) {
+    public synchronized Bundle declareMatchWinner(int games1, int games2, VectorTimestamp vectorTimestamp) throws RemoteException{
+
+
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         this.match_ended = true;
         notifyAll();
@@ -448,5 +468,10 @@ public class MContestantsBench implements BenchInterface {
     public boolean isClosed() {
         return false;
         //Todo - implement
+    }
+
+    private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
+
     }
 }

@@ -26,7 +26,9 @@ public class MRefereeSite implements RefereeSiteInterface{
      * @return  the number of games played
      */
     public Bundle getN_games_played(VectorTimestamp vectorTimestamp) throws RemoteException {
-        return  new Bundle(vectorTimestamp, n_games_played);
+        updVectorTimestamp(vectorTimestamp);//update vector
+
+        return  new Bundle(localvectorTimestamp, n_games_played);
     }
 
     /**
@@ -40,6 +42,7 @@ public class MRefereeSite implements RefereeSiteInterface{
      * The referee announce a new game
      */
     public synchronized Bundle announceNewGame(VectorTimestamp vectorTimestamp) throws RemoteException {
+        updVectorTimestamp(vectorTimestamp);//update vector
 
         return new Bundle(vectorTimestamp);
     }
@@ -49,6 +52,8 @@ public class MRefereeSite implements RefereeSiteInterface{
      * @return GameStat data with the info of the winner
      */
     public synchronized Bundle declareGameWinner(int score_T1, int score_T2, int knock_out, int n_games,VectorTimestamp vectorTimestamp)throws RemoteException {
+        updVectorTimestamp(vectorTimestamp);//update vector
+
         n_games_played +=1;//increase number of games played
 
         if(knock_out== 1 )
