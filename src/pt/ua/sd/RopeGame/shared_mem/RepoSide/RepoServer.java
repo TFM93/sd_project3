@@ -13,8 +13,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RepoServer {
     public static void main(String[] args){
-        if (args.length != 3) {
-            System.out.println("Usage: <registry host name> <registry port number> <listening port> ");
+        if (args.length != 5) {
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> <players per team> <players pushing the rope>");
             System.exit(0);
         }
 
@@ -24,6 +24,8 @@ public class RepoServer {
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
+        int playersPerTeam = Integer.parseInt(args[3]);
+        int playersPushing = Integer.parseInt(args[4]);
 
         /* look for the remote object by name in the remote host registry */
         Registry registry = null;
@@ -43,7 +45,7 @@ public class RepoServer {
         System.out.println("Security manager was created and installed!");
 
         /* instantiate a remote object that runs mobile code and generate a stub for it */
-        MGeneralInfoRepo repo = new MGeneralInfoRepo();
+        MGeneralInfoRepo repo = new MGeneralInfoRepo(playersPerTeam,playersPushing,0,0,0);
         RepoInterface repoStub = null;
         //int listeningPort = 22214;                            /* it should be set accordingly in each case */
 
