@@ -14,7 +14,10 @@ import pt.ua.sd.RopeGame.interfaces.RepoInterface;
 import java.io.*;
 import java.nio.file.*;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Logging repository<br>
@@ -60,16 +63,21 @@ public class MGeneralInfoRepo implements RepoInterface{
 
     private int players_pushing;
 
+    /**
+     * States list
+     * @serialField statesList
+     */
+    private final List<logLine> statesList;
+
 
     /**
      * Constructor
      * @param players_team number of players per team
      * @param players_pushing number of players pushing the rope
-     * @param n_trials number of trials
-     * @param n_games number of games
-     * @param knockDif maximum diference to the rope center to reach a knockout
      */
    public MGeneralInfoRepo(int players_team, int players_pushing) {
+       statesList = new ArrayList<>();
+
         this.players_pushing = players_pushing;
 
 
@@ -479,5 +487,42 @@ public class MGeneralInfoRepo implements RepoInterface{
     public boolean isClosed() {
         return false;
         //Todo - implement
+    }
+
+    /**
+     * Bubble Sort.
+     */
+    private void mySort() {
+
+        boolean swap = true;
+        int f = statesList.size() - 1;
+
+        while (swap) {
+            swap = false;
+
+            for (int i = 0; i < f; i++) {
+
+                int[] array1 = statesList.get(i).getVectorTimestamp();
+                int[] array2 = statesList.get(i+1).getVectorTimestamp();
+                int cont1 = 0;
+                int cont2 = 0;
+
+                for (int j=0 ; j<array1.length ; j++) {
+
+                    if (array1[j] > array2[j]) {
+                        cont1++;
+                    } else if (array1[j] < array2[j]) {
+                        cont2++;
+                    }
+                }
+
+                if (cont1 > cont2) {
+                    Collections.swap(statesList, i, i+1);
+                }
+
+                f--;
+            }
+
+        }
     }
 }
