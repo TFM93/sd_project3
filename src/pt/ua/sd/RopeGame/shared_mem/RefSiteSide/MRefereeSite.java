@@ -1,10 +1,15 @@
 package pt.ua.sd.RopeGame.shared_mem.RefSiteSide;
 
 import pt.ua.sd.RopeGame.enums.WonType;
+import pt.ua.sd.RopeGame.info.Bundle;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.interfaces.IRefereeSiteCoach;
 import pt.ua.sd.RopeGame.interfaces.IRefereeSiteContestant;
 import pt.ua.sd.RopeGame.interfaces.IRefereeSiteReferee;
+import pt.ua.sd.RopeGame.interfaces.RefereeSiteInterface;
 import pt.ua.sd.RopeGame.structures.GameStat;
+
+import java.rmi.RemoteException;
 
 /**
  * Refereee Site shared memory<br>
@@ -13,15 +18,15 @@ import pt.ua.sd.RopeGame.structures.GameStat;
  *
  *
  */
-public class MRefereeSite implements IRefereeSiteCoach, IRefereeSiteReferee, IRefereeSiteContestant{
+public class MRefereeSite implements RefereeSiteInterface{
 
 
     /**
      *
      * @return  the number of games played
      */
-    public int getN_games_played() {
-        return n_games_played;
+    public Bundle getN_games_played(VectorTimestamp vectorTimestamp) throws RemoteException {
+        return  new Bundle(vectorTimestamp, n_games_played);
     }
 
     /**
@@ -34,41 +39,47 @@ public class MRefereeSite implements IRefereeSiteCoach, IRefereeSiteReferee, IRe
     /**
      * The referee announce a new game
      */
-    public synchronized void announceNewGame() {
+    public synchronized Bundle announceNewGame(VectorTimestamp vectorTimestamp) throws RemoteException {
 
-
+        return new Bundle(vectorTimestamp);
     }
 
     /**
      * The number of played games is increased and the game winner is decided
      * @return GameStat data with the info of the winner
      */
-    public synchronized GameStat declareGameWinner(int score_T1, int score_T2, int knock_out, int n_games) {
+    public synchronized Bundle declareGameWinner(int score_T1, int score_T2, int knock_out, int n_games,VectorTimestamp vectorTimestamp)throws RemoteException {
         n_games_played +=1;//increase number of games played
 
         if(knock_out== 1 )
         {
-            return new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT);
+            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
         }
         else if(knock_out == 2){
 
-            return new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT);
+            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),knock_out, WonType.KNOCKOUT));
         }
         else if(score_T1>score_T2)
         {
 
-            return new GameStat((n_games_played<n_games),1,WonType.POINTS);
+            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),1,WonType.POINTS));
         }
         else if(score_T1<score_T2){
 
-            return new GameStat((n_games_played<n_games),2,WonType.POINTS);
+            return new Bundle(vectorTimestamp,new GameStat((n_games_played<n_games),2,WonType.POINTS));
         }
 
-        return new GameStat((n_games_played<n_games),0,WonType.DRAW);
-
-
-
+        return new Bundle(vectorTimestamp, new GameStat((n_games_played<n_games),0,WonType.DRAW));
 
     }
 
+    @Override
+    public void terminate() throws RemoteException {
+        //Todo - implement
+    }
+
+    public boolean isClosed() {
+        return false;
+        //Todo - implement
+    }
 }

@@ -2,11 +2,15 @@ package pt.ua.sd.RopeGame.shared_mem.PlaygroundSide;
 
 
 import pt.ua.sd.RopeGame.enums.WonType;
+import pt.ua.sd.RopeGame.info.Bundle;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundCoach;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundContestant;
 import pt.ua.sd.RopeGame.interfaces.IPlaygroundReferee;
+import pt.ua.sd.RopeGame.interfaces.PlaygroundInterface;
 import pt.ua.sd.RopeGame.structures.TrialStat;
 
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import static java.lang.Thread.sleep;
@@ -17,7 +21,7 @@ import static java.lang.Thread.sleep;
  * notes to decide which contestants are playing in the next trial.
  */
 
-public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, IPlaygroundCoach {
+public class MPlayground implements PlaygroundInterface {
 
     //private int n_contestant_pulls_team1[] = {0,0,0,0,0};
     //private int n_contestant_pulls_team2[] = {0,0,0,0,0};
@@ -39,7 +43,7 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
     /**
      * Have contestants wait for the trial decision to change their state into SEAT_AT_THE_BENCH
      */
-    public synchronized void seatDown(int n_players_pushing)
+    public synchronized Bundle seatDown(int n_players_pushing, VectorTimestamp vectorTimestamp)
     {
 
         while (!this.trial_decided_contestants){
@@ -56,14 +60,14 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
             this.n_contestants_done_awake = 0;
             this.trial_decided_contestants = false;
         }
-
+        return new Bundle(vectorTimestamp);
     }
 
 
     /**
      * Contestants wait until they are all in position to pull the rope and, only then, will they start pulling
      */
-    public synchronized void pullTheRope(int team_id, int strenght, int contestant_id, int n_players_pushing, int n_players) {
+    public synchronized Bundle pullTheRope(int team_id, int strenght, int contestant_id, int n_players_pushing, int n_players, VectorTimestamp vectorTimestamp) {
         this.ready_to_push += 1;
 
         if(n_contestant_pulls_team1 == null){
@@ -108,7 +112,8 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
                 this.finished_pushing = 0;
                 this.push_at_all_force = false;
             }
-            return;
+            return new Bundle(vectorTimestamp);
+
         }
         else if (team_id == 2){
             center_rope += strenght;//positive value for push to the right
@@ -126,9 +131,11 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
                 this.push_at_all_force = false;
             }
 
-            return;
+            return new Bundle(vectorTimestamp);
+
         }
-        return;
+        return new Bundle(vectorTimestamp);
+
     }
 
 
@@ -136,7 +143,7 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
      * The referee waits until the contestants are done pulling the rope and the asserts the trial winner
      * @return trial_stats
      */
-    public synchronized TrialStat assertTrialDecision(int n_players_pushing, int knockDif) {
+    public synchronized Bundle assertTrialDecision(int n_players_pushing, int knockDif, VectorTimestamp vectorTimestamp) {
 
         boolean decision = false;
         WonType decision_type = WonType.NONE;
@@ -192,7 +199,7 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
             decision=true;
         }
 
-        return new TrialStat(decision,winner, decision_type, center_rope);
+        return new Bundle(vectorTimestamp,new TrialStat(decision,winner, decision_type, center_rope));
     }
 
     /**
@@ -201,7 +208,7 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
      * @param selected_contestants selected contestants in current trial
      * @return selected_contestant_for_next_trial
      */
-    public synchronized int[] reviewNotes(int[] selected_contestants, int n_players, int n_players_pushing) {
+    public synchronized Bundle reviewNotes(int[] selected_contestants, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp) {
 
         while (!this.trial_decided_coach){
             try {
@@ -227,14 +234,14 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
             this.trial_decided_coach = false;
         }
 
-        return selected_contestants;
+        return new Bundle(vectorTimestamp, selected_contestants);
     }
 
 
     /**
      * Contestants are done pulling the rope
      */
-    public synchronized void iAmDone(int n_players_pushing){
+    public synchronized Bundle iAmDone(int n_players_pushing, VectorTimestamp vectorTimestamp){
         this.n_contestants_done += 1;
 
         /*  last contestant done wakes up referee  */
@@ -243,7 +250,18 @@ public class MPlayground implements IPlaygroundContestant, IPlaygroundReferee, I
             this.contestants_are_done = true;
             notifyAll();
         }
+        return new Bundle(vectorTimestamp);
 
+    }
+
+    @Override
+    public void terminate() throws RemoteException {
+        //Todo - implement
+    }
+
+    public boolean isClosed() {
+        return false;
+        //Todo - implement
     }
 
 

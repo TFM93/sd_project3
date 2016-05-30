@@ -19,7 +19,7 @@ import java.util.Random;
  *  <b><center><font size=5>This class represents the main class of the project, is in this class that the shared memories are created and the threads launched.</font></center></b><br>
  */
 public class RopeGame {
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
 
         int players_team=0;
         int players_pushing=0;
@@ -119,7 +119,7 @@ public class RopeGame {
         coach_team2.start();
         ref.start();
 
-        /*  threads join  */
+        *//*  threads join  *//*
 
         try {
             coach_team1.join();
@@ -148,5 +148,5 @@ public class RopeGame {
             }
         }
 
-    }
+    }*/
 }

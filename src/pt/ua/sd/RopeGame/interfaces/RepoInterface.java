@@ -9,9 +9,7 @@ import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
 
-/**
- * Created by ivosilva on 23/05/16.
- */
+
 public interface RepoInterface extends Remote{
 
     Bundle refereeLog(RefState state, int trial_number, VectorTimestamp vectorTimestamp)throws RemoteException;
@@ -24,6 +22,6 @@ public interface RepoInterface extends Remote{
     Bundle contestantLog(int id, int team_id, int strength, ContestantState state, VectorTimestamp vectorTimestamp)throws RemoteException;
     void terminate() throws RemoteException;
 
-    boolean isClosed() throws RemoteException;
+    boolean isClosed();
 
 }

@@ -5,9 +5,7 @@ import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.structures.GameStat;
 
-/**
- * Created by ivosilva on 23/05/16.
- */
+
 public interface RefereeSiteInterface extends Remote {
 
     Bundle announceNewGame(VectorTimestamp vectorTimestamp)throws RemoteException;

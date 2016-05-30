@@ -66,7 +66,7 @@ public class MContestantsBench implements BenchInterface {
     /**
      * Referee calls the trial
      */
-    public synchronized Bundle callTrial(VectorTimestamp vectorTimestamp)
+    public synchronized Bundle callTrial(VectorTimestamp vectorTimestamp) throws RemoteException
     {
 
         /*  wake up coaches in reviewNotes  */

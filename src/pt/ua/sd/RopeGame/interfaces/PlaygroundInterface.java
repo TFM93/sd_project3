@@ -5,9 +5,7 @@ import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.structures.TrialStat;
 
-/**
- * Created by ivosilva on 23/05/16.
- */
+
 public interface PlaygroundInterface extends Remote {
 
     Bundle reviewNotes(int[] selected_contestants, int n_players, int n_players_pushing, VectorTimestamp vectorTimestamp)throws RemoteException;
@@ -22,7 +20,7 @@ public interface PlaygroundInterface extends Remote {
 
     void terminate() throws RemoteException;
 
-    boolean isClosed() throws RemoteException;
+    boolean isClosed();
 
 
 }

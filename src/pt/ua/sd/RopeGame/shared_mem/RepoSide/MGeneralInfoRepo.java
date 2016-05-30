@@ -4,12 +4,16 @@ import pt.ua.sd.RopeGame.enums.CoachState;
 import pt.ua.sd.RopeGame.enums.ContestantState;
 import pt.ua.sd.RopeGame.enums.RefState;
 import pt.ua.sd.RopeGame.enums.WonType;
+import pt.ua.sd.RopeGame.info.Bundle;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.interfaces.IRepoCoach;
 import pt.ua.sd.RopeGame.interfaces.IRepoContestant;
 import pt.ua.sd.RopeGame.interfaces.IRepoReferee;
+import pt.ua.sd.RopeGame.interfaces.RepoInterface;
 
 import java.io.*;
 import java.nio.file.*;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 /**
@@ -19,7 +23,7 @@ import java.util.Arrays;
  *     The logging file is saved in the root of the project.
  *     Info saved on RopeGame.log
  */
-public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoReferee{
+public class MGeneralInfoRepo implements RepoInterface{
 
     /**
      * Internal Data
@@ -65,8 +69,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param n_games number of games
      * @param knockDif maximum diference to the rope center to reach a knockout
      */
-   public MGeneralInfoRepo(int players_team, int players_pushing, int n_trials, int n_games, int knockDif)
-    {
+   public MGeneralInfoRepo(int players_team, int players_pushing, int n_trials, int n_games, int knockDif) {
         this.players_pushing = players_pushing;
 
 
@@ -109,14 +112,14 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
             team2_strength[i] = 0;
         }
 
-        Addheader(true);//add initial header
+        AddheaderInternal(true);//add initial header
     }
 
     /**
      * Function responsible to add the header to the log
      * @param first if true prints to file only the initial header, if false also prints the game number
      */
-    public synchronized void Addheader(boolean first)
+    public synchronized Bundle Addheader(boolean first, VectorTimestamp vectorTimestamp)throws RemoteException
     {
         String temp;//temporary string
 
@@ -136,6 +139,35 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
             //System.out.printf(temp);
             TO_WRITE += temp;
         }
+        return new Bundle(vectorTimestamp);
+
+    }
+
+    /**
+     * Function responsible to add the header to the log
+     * @param first if true prints to file only the initial header, if false also prints the game number
+     */
+    public synchronized void AddheaderInternal(boolean first)
+    {
+        String temp;//temporary string
+
+        if(first) {
+            temp="                               Game of the Rope - Description of the internal state" +
+                    "\n\n" +
+                    "Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5     Trial    \n" +
+                    "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n";
+            //System.out.printf(temp);
+            TO_WRITE += temp;
+        }
+        else {
+            // game_nr +=1;
+            temp = "Game " + game_nr +
+                    " \nRef Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5     Trial    \n" +
+                    "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n";
+            //System.out.printf(temp);
+            TO_WRITE += temp;
+        }
+
     }
 
     /**
@@ -144,7 +176,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param state state of the referee in current time
      */
     @Override
-    public synchronized void coachLog(int team_id, CoachState state) {
+    public synchronized Bundle coachLog(int team_id, CoachState state, VectorTimestamp vectorTimestamp)throws RemoteException {
         switch (state){
             case WAIT_FOR_REFEREE_COMMAND:
                 coach_state[team_id - 1] = coachStates.WRC;
@@ -158,15 +190,18 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
         }
 
         printStates();
+        return new Bundle(vectorTimestamp);
 
     }
 
     /**
      * just increase the number of played games
      */
-    public synchronized void updGame_nr()
+    public synchronized Bundle updGame_nr( VectorTimestamp vectorTimestamp)throws RemoteException
     {
         game_nr +=1;
+        return new Bundle(vectorTimestamp);
+
     }
 
 
@@ -177,7 +212,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param wonType knock out, draw or points
      * @param nr_trials number of played trials
      */
-    public synchronized void setResult(int team_id, WonType wonType, int nr_trials)
+    public synchronized Bundle setResult(int team_id, WonType wonType, int nr_trials, VectorTimestamp vectorTimestamp)throws RemoteException
     {
         String temp="";
 
@@ -200,6 +235,8 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
 
         TO_WRITE += temp;// buffers the added info to be writen in future
         writeToFile();//write the TO_WRITE buffer to file
+        return new Bundle(vectorTimestamp);
+
     }
 
     /**
@@ -208,7 +245,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param score1 score of team 1
      * @param score2 score of team 2
      */
-    public synchronized void printMatchResult(int winner,int score1, int score2)
+    public synchronized Bundle printMatchResult(int winner,int score1, int score2, VectorTimestamp vectorTimestamp)throws RemoteException
     {
         String temp;
         if(score1 != score2)
@@ -221,6 +258,8 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
         }
         TO_WRITE += temp;//buffers the info
         writeToFile();//writes the text present in buffer
+        return new Bundle(vectorTimestamp);
+
     }
 
     /**
@@ -229,7 +268,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param trial_number number of current trial
      */
     @Override
-    public synchronized void refereeLog(RefState state, int trial_number) {
+    public synchronized Bundle refereeLog(RefState state, int trial_number, VectorTimestamp vectorTimestamp)throws RemoteException {
         // START_OF_THE_MATCH, START_OF_A_GAME, TEAMS_READY, WAIT_FOR_TRIAL_CONCLUSION, END_OF_A_GAME, END_OF_A_MATCH
         switch (state){
             case START_OF_THE_MATCH:
@@ -260,6 +299,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
 
         printStates();//buffers the states
         writeToFile();//writes the buffer to file
+        return new Bundle(vectorTimestamp);
 
     }
 
@@ -271,7 +311,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * @param state contestant state
      */
     @Override
-    public synchronized void contestantLog(int id, int team_id, int strength, ContestantState state) {
+    public synchronized Bundle contestantLog(int id, int team_id, int strength, ContestantState state, VectorTimestamp vectorTimestamp)throws RemoteException {
         //    SEAT_AT_THE_BENCH, STAND_IN_POSITION, DO_YOUR_BEST, START
         switch (state){
             case SEAT_AT_THE_BENCH:
@@ -339,6 +379,7 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
 
         printStates();//buffers the changes
         writeToFile();//writes the changes
+        return new Bundle(vectorTimestamp);
     }
 
     /**
@@ -386,9 +427,10 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
      * updates the center of the rope locally
      * @param new_val new rope center
      */
-    public synchronized void updtRopeCenter(int new_val)
+    public synchronized Bundle updtRopeCenter(int new_val, VectorTimestamp vectorTimestamp)throws RemoteException
     {
         PS_center = new_val;
+        return new Bundle(vectorTimestamp);
 
     }
 
@@ -429,5 +471,13 @@ public class MGeneralInfoRepo implements IRepoCoach, IRepoContestant, IRepoRefer
         }
     }
 
+    @Override
+    public void terminate() throws RemoteException {
+        //Todo - implement
+    }
 
+    public boolean isClosed() {
+        return false;
+        //Todo - implement
+    }
 }
