@@ -1,10 +1,11 @@
 package pt.ua.sd.RopeGame.active_entities.CoachSide;
 
 import pt.ua.sd.RopeGame.enums.CoachState;
-import pt.ua.sd.RopeGame.interfaces.IPlaygroundCoach;
-import pt.ua.sd.RopeGame.interfaces.IContestantsBenchCoach;
-import pt.ua.sd.RopeGame.interfaces.IRefereeSiteCoach;
-import pt.ua.sd.RopeGame.interfaces.IRepoCoach;
+import pt.ua.sd.RopeGame.info.Bundle;
+import pt.ua.sd.RopeGame.info.VectorTimestamp;
+import pt.ua.sd.RopeGame.interfaces.*;
+
+import java.rmi.RemoteException;
 
 /**
  * Coach thread<br>
@@ -27,15 +28,17 @@ public class Coach extends Thread {
     private int id;//represents the id of the coach
     private int team_id;//represents the id of the team
     private int team_selected_contestants[];//each coach has 3 selected contestants to play
-    private IContestantsBenchCoach contestants_bench;//represents the bench shared memory
-    private IRefereeSiteCoach referee_site;//represents the referee site shared memory
-    private IPlaygroundCoach playground;//represents the playground shared memory
-    private IRepoCoach repo;//represents the general info repository of shared memory
+    private BenchInterface contestants_bench;//represents the bench shared memory
+    private RefereeSiteInterface referee_site;//represents the referee site shared memory
+    private PlaygroundInterface playground;//represents the playground shared memory
+    private RepoInterface repo;//represents the general info repository of shared memory
     private int n_players;//number of players in each team, defined in rg.config
     private int n_players_pushing;//number of players in each team pushing at any given trial, defined in rg.config
     private int n_trials;//number of trials, defined in rg.config
     private int n_games;//number of games, defined in rg.config
     private int knockDif;//number of knockout difference needed to win, defined in rg.config
+    private final VectorTimestamp vectorTimestamp;
+
 
     /**
      * Constructor
@@ -46,9 +49,9 @@ public class Coach extends Thread {
      * @param contestants_bench contestants bench shared memory instancy
      * @param repo general info repository shared memory instancy
      */
-    public Coach(int id, int team_id, IPlaygroundCoach playground, IRefereeSiteCoach referee_site,
-                 IContestantsBenchCoach contestants_bench, IRepoCoach repo, int n_players, int n_players_pushing,
-                 int n_trials, int n_games, int knockDif) {
+    public Coach(int id, int team_id, PlaygroundInterface playground, RefereeSiteInterface referee_site,
+                 BenchInterface contestants_bench, RepoInterface repo, int n_players, int n_players_pushing,
+                 int n_trials, int n_games, int knockDif, int vectorTimestampId, int nEntities) {
         this.id = id;
         this.team_id = team_id;
         this.playground = playground;
@@ -60,6 +63,7 @@ public class Coach extends Thread {
         this.n_trials = n_trials;
         this.n_games = n_games;
         this.knockDif = knockDif;
+        this.vectorTimestamp = new VectorTimestamp(vectorTimestampId, nEntities);
     }
 
     /**
@@ -67,8 +71,14 @@ public class Coach extends Thread {
      */
     public void run() {
 
+        Bundle bundle;
+
         CoachState state = CoachState.WAIT_FOR_REFEREE_COMMAND;//initial state
-        repo.coachLog(this.team_id, state);//update repo
+        try {
+            repo.coachLog(this.team_id, state, vectorTimestamp);//update repo
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         boolean match_not_over = true;
 
 
@@ -81,23 +91,57 @@ public class Coach extends Thread {
                             team_selected_contestants[i] = i;
                         }
                     }
-                    match_not_over = this.contestants_bench.callContestants(this.team_id,this.team_selected_contestants, n_players);
+                    try {
+                        bundle = this.contestants_bench.callContestants(this.team_id,this.team_selected_contestants, n_players, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        match_not_over = (boolean) bundle.getValue();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+
                     state = CoachState.ASSEMBLE_TEAM;//change state
-                    repo.coachLog(this.team_id, state);//update central info repository
+                    try {
+                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case ASSEMBLE_TEAM:
-                    this.contestants_bench.informReferee();
+                    try {
+                        bundle = this.contestants_bench.informReferee(vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     state = CoachState.WATCH_TRIAL;
-                    repo.coachLog(this.team_id, state);//update central info repository
+                    try {
+                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case WATCH_TRIAL:
-                    this.team_selected_contestants = this.playground.reviewNotes(this.team_selected_contestants, n_players, n_players_pushing);
+                    try {
+                        bundle = this.playground.reviewNotes(this.team_selected_contestants, n_players, n_players_pushing, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        this.team_selected_contestants = (int[]) bundle.getValue();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     state = CoachState.WAIT_FOR_REFEREE_COMMAND;
-                    repo.coachLog(this.team_id, state);//update central info repository
+                    try {
+                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     state= CoachState.WAIT_FOR_REFEREE_COMMAND;//default state
-                    repo.coachLog(this.team_id, state);//update central info repository
+                    try {
+                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

@@ -96,6 +96,7 @@ public class Contestant extends Thread {
                     }
                     try {
                         bundle = contestants_bench.followCoachAdvice(this.id,this.strength,this.team_id, this.n_players, this.n_players_pushing, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                         unpack = (boolean[]) bundle.getValue();
                         match_not_over = unpack[0];
                         if(unpack[1])
@@ -118,7 +119,8 @@ public class Contestant extends Thread {
                     break;
                 case STAND_IN_POSITION:
                     try {
-                        contestants_bench.getReady(n_players_pushing, vectorTimestamp);
+                        bundle = contestants_bench.getReady(n_players_pushing, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -131,7 +133,8 @@ public class Contestant extends Thread {
                     break;
                 case DO_YOUR_BEST:
                     try {
-                        playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, vectorTimestamp);
+                        bundle = playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -141,13 +144,15 @@ public class Contestant extends Thread {
                         e.printStackTrace();
                     }
                     try {
-                        playground.iAmDone(n_players_pushing, vectorTimestamp);
+                        bundle = playground.iAmDone(n_players_pushing, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     decrementStrength();//depois de am done decrementar a forca
                     try {
-                        playground.seatDown(n_players_pushing, vectorTimestamp);
+                        bundle = playground.seatDown(n_players_pushing, vectorTimestamp);
+                        vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
