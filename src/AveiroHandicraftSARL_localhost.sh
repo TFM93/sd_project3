@@ -1,7 +1,7 @@
 #!/bin/bash
-username=sd0201
-password=jeromarques
-confFile=conf_localhost.txt
+username=sd0203
+password=diogocardoso
+confFile=localhost.config
 
 # Read configuration file
 while read line
