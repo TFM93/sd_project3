@@ -25,7 +25,7 @@ public class RefSiteServer {
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
         int nPlayers = Integer.parseInt(args[3]);
-        int nEntities = nPlayers + 6;
+        int nEntities = (2*nPlayers) + 6;
 
         /* look for the remote object by name in the remote host registry */
         Registry registry = null;

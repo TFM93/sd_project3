@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class PlaygroundServer {
     public static void main(String[] args){
         if (args.length != 3) {
-            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players>");
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players per team>");
             System.exit(0);
         }
 
@@ -24,7 +24,7 @@ public class PlaygroundServer {
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
         int nPlayers = Integer.parseInt(args[3]);
-        int nEntities = 3+ nPlayers +3;
+        int nEntities = 3+ (2*nPlayers) +3;
         /* look for the remote object by name in the remote host registry */
         Registry registry = null;
 

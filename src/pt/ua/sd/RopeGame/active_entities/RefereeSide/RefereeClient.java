@@ -16,9 +16,9 @@ import java.sql.Ref;
 public class RefereeClient {
 
     public static void main(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 7) {
             System.out.println("Usage: <registry host> <registry port> "
-                    + "<number of players> <number of players pushing> <number of trials> <number of games> <knockout differential> <number of entities>");
+                    + "<number of players> <number of players pushing> <number of trials> <number of games> <knockout differential>");
             System.exit(0);
         }
 
@@ -30,7 +30,7 @@ public class RefereeClient {
         int n_trials = Integer.parseInt(args[4]);
         int n_games = Integer.parseInt(args[5]);
         int knockdif = Integer.parseInt(args[6]);
-        int nEntities = Integer.parseInt(args[7]);
+        int nEntities = 6 + (2*n_players);
 
         /*  fetch remote object  */
         String nameEntryBench = "Bench";

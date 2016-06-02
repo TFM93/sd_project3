@@ -19,7 +19,7 @@ public class BenchServer {
     public static void main(String[] args) {
 
         if (args.length != 4) {
-            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players>");
+            System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players per team>");
             System.exit(0);
         }
 
@@ -28,7 +28,7 @@ public class BenchServer {
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);//porta a escuta do server
         int nPlayers = Integer.parseInt(args[3]);
-        int nEntities = 3 + nPlayers + 3;//number of players plus both coaches and an referee. the last sum is referred to the shared memories
+        int nEntities = 3 + (2*nPlayers) + 3;//number of players plus both coaches and an referee. the last sum is referred to the shared memories
 
         // Step 1 - Get Repository remote object
 
