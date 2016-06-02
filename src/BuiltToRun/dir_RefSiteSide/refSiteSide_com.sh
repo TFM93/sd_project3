@@ -2,4 +2,4 @@
 java -Djava.rmi.server.codebase=$5\
      -Djava.rmi.server.useCodebaseOnly=true\
      -Djava.security.policy=java.policy\
-     RefSiteSide.RefSiteServer $1 $2 $3 $4
+     pt.ua.sd.RopeGame.shared_mem.RefSiteSide.RefSiteServer $1 $2 $3 $4
