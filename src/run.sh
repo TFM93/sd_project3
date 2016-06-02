@@ -3,50 +3,50 @@ printf "Setting RMI registry ...\n"
 sleep 2
 
 printf "\nStarting Service Register ...\n"
-cd dir_registry/
+cd BuiltToRun/dir_registry/
 ./registry_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
 printf "\nStarting Repository ...\n"
-cd dir_repositorySide/
+cd BuiltToRun/dir_RepoSide/
 ./repositorySide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting Storage ...\n"
-cd dir_storageSide/
-./storageSide_com_alt.sh $1 $2 &
+printf "\nStarting RefereeSite ...\n"
+cd BuiltToRun/dir_RefSiteSide/
+./refSiteSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting WorkShop ...\n"
-cd dir_workshopSide/
-./workshopSide_com_alt.sh $1 $2 &
+printf "\nStarting Playground ...\n"
+cd BuiltToRun/dir_PlaygroundSide/
+./playgroundSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting Shop ...\n"
-cd dir_shopSide/
-./shopSide_com_alt.sh $1 $2 &
+printf "\nStarting Bench ...\n"
+cd BuiltToRun/dir_BenchSide/
+./benchSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting Entrepreneur ...\n"
-cd dir_entrepreneurSide/
-./entrepreneurSide_com_alt.sh $1 $2 &
+printf "\nStarting Referee ...\n"
+cd BuiltToRun/dir_RefereeSide/
+./refereeSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting Craftsmen ...\n"
-cd dir_craftsmenSide/
-./craftsmenSide_com_alt.sh $1 $2 &
+printf "\nStarting Coaches ...\n"
+cd BuiltToRun/dir_CoachSide/
+./coachSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
-printf "\nStarting Customers ...\n"
-cd dir_customersSide/
-./customersSide_com_alt.sh $1 $2 &
+printf "\nStarting Contestants ...\n"
+cd BuiltToRun/dir_ContestantsSide/
+./contestantSide_com_alt.sh $1 $2 &
 cd ..
 sleep 2
 
