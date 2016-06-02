@@ -1,56 +1,67 @@
 # Compile
 echo "Compiling..."
-javac interfaces/*.java
-javac info/*.java
-javac registry/*.java
-javac ©*.java
-javac active_entities/ContestantSide/*.java
-javac active_entities/RefereeSide/*.java
-javac shared_mem/BenchSide/*.java
-javac shared_mem/PlaygroundSide/*.java
-javac shared_mem/RefSiteSide/*.java
-javac shared_mem/RepoSide/*.java
-javac enums/*.java
-javac structures/*java
+javac pt/ua/sd/RopeGame/interfaces/*.java
+javac pt/ua/sd/RopeGame/info/*.java
+javac pt/ua/sd/RopeGame/registry/*.java
+javac pt/ua/sd/RopeGame/active_entities/ContestantSide/*.java
+javac pt/ua/sd/RopeGame/active_entities/RefereeSide/*.java
+javac pt/ua/sd/RopeGame/active_entities/CoachSide/*.java
+javac pt/ua/sd/RopeGame/shared_mem/BenchSide/*.java
+javac pt/ua/sd/RopeGame/shared_mem/PlaygroundSide/*.java
+javac pt/ua/sd/RopeGame/shared_mem/RefSiteSide/*.java
+javac pt/ua/sd/RopeGame/shared_mem/RepoSide/*.java
+javac pt/ua/sd/RopeGame/enums/*.java
+javac pt/ua/sd/RopeGame/structures/*java
 
 
 # Deploy classes in each side
 echo "Deploying..."
-cp interfaces/Register.class dir_registry/interfaces/
-cp registry/*.class dir_registry/registry/
+cp pt/ua/sd/RopeGame/interfaces/Register.class BuiltToRun/dir_registry/interfaces/
+cp pt/ua/sd/RopeGame/registry/*.class BuiltToRun/dir_registry/registry/
 
-cp interfaces/*.class dir_CoachSide/interfaces/
-cp active_entities/ContestantSide/*.class dir_Contestantide/storageSide/
+cp pt/ua/sd/RopeGame/interfaces/*.class BuiltToRun/dir_ContestantSide/interfaces/
+cp pt/ua/sd/RopeGame/active_entities/ContestantSide/*.class BuiltToRun/dir_ContestantSide/ContestantSide/
 
-cp interfaces/*.class dir_repositorySide/interfaces/
-cp active_entities/RepoSide/*.class dir_repositorySide/repositorySide/
+cp pt/ua/sd/RopeGame/interfaces/*.class BuiltToRun/dir_CoachSide/interfaces/
+cp pt/ua/sd/RopeGame/active_entities/CoachSide/*.class BuiltToRun/dir_CoachSide/CoachSide/
 
-cp interfaces/*.class dir_shopSide/interfaces/
-cp info/*.class dir_shopSide/info/
-cp shopSide/*.class dir_shopSide/shopSide/
+cp pt/ua/sd/RopeGame/interfaces/*.class BuiltToRun/dir_RefereeSide/interfaces/
+cp pt/ua/sd/RopeGame/active_entities/RefereeSide/*.class BuiltToRun/dir_RefereeSide/RefereeSide/
 
-cp interfaces/*.class dir_workshopSide/interfaces/
-cp info/*.class dir_workshopSide/info/
-cp workshopSide/*.class dir_workshopSide/workshopSide/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_RefereeSide/info/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_CoachSide/info/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_ContestantSide/info/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_BenchSide/info/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_PlaygroundSide/info/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_RefSiteSide/info/
 
-cp interfaces/ShopInterface.class dir_customersSide/interfaces/
-cp info/*.class dir_customersSide/info/
-cp customersSide/*.class dir_customersSide/customersSide/
 
-cp interfaces/RepoInterface.class interfaces/Register.class interfaces/PlaygroundInterface.class interfaces/RefereeSiteInterface.class interfaces/BenchInterface.class dir_RepoSide/interfaces/
-cp info/*.class dir_RepoSide/info/
-cp shared_mem/RepoSide/*.class dir_RepoSide/RepoSide/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefereeSide/enums/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_CoachSide/enums/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_ContestantSide/enums/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_BenchSide/enums/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_PlaygroundSide/enums/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefSiteSide/enums/
 
-cp interfaces/RepoInterface.class interfaces/Register.class interfaces/PlaygroundInterface.class interfaces/RefereeSiteInterface.class interfaces/BenchInterface.class dir_BenchSide/interfaces/
-cp info/*.class dir_BenchSide/info/
-cp shared_mem/BenchSide/*.class dir_BenchSide/BenchSide/
 
-cp interfaces/RepoInterface.class interfaces/Register.class interfaces/PlaygroundInterface.class interfaces/RefereeSiteInterface.class interfaces/BenchInterface.class dir_PlaygroundSide/interfaces/
-cp info/*.class dir_PlaygroundSide/info/
-cp shared_mem/PlaygroundSide/*.class dir_PlaygroundSide/PlaygroundSide/
+cp pt/ua/sd/RopeGame/interfaces/RepoInterface.class pt/ua/sd/RopeGame/interfaces/Register.class pt/ua/sd/RopeGame/interfaces/PlaygroundInterface.class pt/ua/sd/RopeGame/interfaces/RefereeSiteInterface.class pt/ua/sd/RopeGame/interfaces/BenchInterface.class BuiltToRun/dir_RepoSide/interfaces/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_RepoSide/info/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefSiteSide/enums/
+cp pt/ua/sd/RopeGame/shared_mem/RepoSide/*.class BuiltToRun/dir_RepoSide/RepoSide/
 
-cp interfaces/RepoInterface.class interfaces/Register.class interfaces/PlaygroundInterface.class interfaces/RefereeSiteInterface.class interfaces/BenchInterface.class dir_RefSiteSide/interfaces/
-cp info/*.class dir_RefSiteSide/info/
-cp shared_mem/RefSiteSide/*.class dir_RefSiteSide/RefSiteSide/
+cp pt/ua/sd/RopeGame/interfaces/RepoInterface.class pt/ua/sd/RopeGame/interfaces/Register.class pt/ua/sd/RopeGame/interfaces/PlaygroundInterface.class pt/ua/sd/RopeGame/interfaces/RefereeSiteInterface.class pt/ua/sd/RopeGame/interfaces/BenchInterface.class BuiltToRun/dir_BenchSide/interfaces/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_BenchSide/info/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefSiteSide/enums/
+cp pt/ua/sd/RopeGame/shared_mem/BenchSide/*.class BuiltToRun/dir_BenchSide/BenchSide/
+
+cp pt/ua/sd/RopeGame/interfaces/RepoInterface.class pt/ua/sd/RopeGame/interfaces/Register.class pt/ua/sd/RopeGame/interfaces/PlaygroundInterface.class pt/ua/sd/RopeGame/interfaces/RefereeSiteInterface.class pt/ua/sd/RopeGame/interfaces/BenchInterface.class BuiltToRun/dir_PlaygroundSide/interfaces/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_PlaygroundSide/info/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefSiteSide/enums/
+cp pt/ua/sd/RopeGame/shared_mem/PlaygroundSide/*.class BuiltToRun/dir_PlaygroundSide/PlaygroundSide/
+
+cp pt/ua/sd/RopeGame/interfaces/RepoInterface.class pt/ua/sd/RopeGame/interfaces/Register.class pt/ua/sd/RopeGame/interfaces/PlaygroundInterface.class pt/ua/sd/RopeGame/interfaces/RefereeSiteInterface.class pt/ua/sd/RopeGame/interfaces/BenchInterface.class BuiltToRun/dir_RefSiteSide/interfaces/
+cp pt/ua/sd/RopeGame/info/*.class BuiltToRun/dir_RefSiteSide/info/
+cp pt/ua/sd/RopeGame/enums/*.class BuiltToRun/dir_RefSiteSide/enums/
+cp pt/ua/sd/RopeGame/shared_mem/RefSiteSide/*.class BuiltToRun/dir_RefSiteSide/RefSiteSide/
 
 echo "Done!"
