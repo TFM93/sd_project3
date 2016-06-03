@@ -1,19 +1,38 @@
 package pt.ua.sd.RopeGame.structures;
 
-import pt.ua.sd.RopeGame.enums.WonType;
 
-/**
- * Created by tiago and ivosilva on 25-03-2016.<br>
- *     <font size=4>This class represents the status of the game in a certain moment</font>
- *
- *
- */
-public class GameStat {
+
+import java.io.Serializable;
+
+
+public class GameStat implements Serializable{
+
+    /**
+     * Serialization key
+     * @serialField serialVersionUID
+     */
+    private static final long serialVersionUID = 200416L;
+
+    /**
+     * check if theres another game coming
+     */
     private boolean has_next_game;
+    /**
+     * team id
+     */
     private int team;
-    private WonType wonType;
+    /**
+     * {@link Integer} representation of the ordinal of {@link pt.ua.sd.RopeGame.enums.WonType} data structure
+     */
+    private int wonType;
 
-    public GameStat(boolean has_next_game, int team, WonType wonType)
+    /**
+     * Constructor
+     * @param has_next_game to check if theres another game
+     * @param team to check team id
+     * @param wonType to check the Win/Loss status
+     */
+    public GameStat(boolean has_next_game, int team, int wonType)
     {
         this.has_next_game = has_next_game;
         this.team = team;
@@ -39,9 +58,9 @@ public class GameStat {
 
     /**
      *
-     * @return the {@link WonType} type of victory in the game
+     * @return the {@link Integer} type of victory in the game
      */
-    public WonType getWonType() {
+    public int getWonType() {
         return wonType;
     }
 }

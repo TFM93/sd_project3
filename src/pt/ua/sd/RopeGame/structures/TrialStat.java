@@ -1,37 +1,44 @@
 package pt.ua.sd.RopeGame.structures;
 
-import pt.ua.sd.RopeGame.enums.WonType;
 
-/**
- * Created by tiago and ivosilva on 25-03-2016.<br>
- *     <font size=4>This class represents the status of the trial in a certain moment</font>
- *
- *
- */
-public class TrialStat {
+import java.io.Serializable;
+
+
+public class TrialStat implements Serializable{
+
+    /**
+     * Serialization key
+     * @serialField serialVersionUID
+     */
+    private static final long serialVersionUID = 200416L;
+
     /**
      *  The {@link Boolean } instance tells if has(true) or not(false) one next trial in the current game
      */
     private boolean has_next_trial;
 
     /**
-     *  The {@link int} represents the team id (1 or 2)
+     *  represents the team id (1 or 2)
      */
     private int team;
     /**
-     *  The {@link WonType } instance represents the type of the result in the trial
+     *  The  int instance represents the type of the result in the trial
      */
-    private WonType wonType;
+    private int wonType;
     /**
-     *  The {@link int } instance tells the center of the rope in the trial
+     *  tells the center of the rope in the trial
      */
     private  int center_rope;
 
 
     /**
-     *  Constructor
+     * constructor
+     * @param has_next_trial check if theres another trial coming
+     * @param team check team id
+     * @param wonType check the trial WIN/LOSS status and type
+     * @param center_rope check the position of the rope
      */
-    public TrialStat(boolean has_next_trial, int team, WonType wonType, int center_rope)
+    public TrialStat(boolean has_next_trial, int team, int wonType, int center_rope)
     {
         this.has_next_trial = has_next_trial;
         this.team = team;
@@ -62,9 +69,9 @@ public class TrialStat {
     }
 
     /**
-     * @return the {@link WonType } instance that represents the type of the result in the trial
+     * @return the instance int that represents the type of the result in the trial
      */
-    public WonType getWonType() {
+    public int getWonType() {
         return wonType;
     }
 

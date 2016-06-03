@@ -20,7 +20,7 @@ public interface PlaygroundInterface extends Remote {
 
     void terminate() throws RemoteException;
 
-    boolean isClosed();
+    boolean isClosed() throws RemoteException;
 
 
 }

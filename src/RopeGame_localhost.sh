@@ -1,7 +1,7 @@
 #!/bin/bash
 username=sd0203
 password=diogocardoso
-confFile=rg.config
+confFile=localhost.config
 
 # Read configuration file
 while read line
@@ -64,56 +64,56 @@ sudo kill `sudo lsof -t -i:9139`
 } &> /dev/null
 
 printf "Setting RMI registry ...\n"
-./set_rmiregistry_alt.sh $registyPortNum &
+./set_rmiregistry_alt.sh $registryPortNum &
 sleep 2
 
 cd BuiltToRun/
 
 printf "\nStarting Service Register ...\n"
 cd dir_registry/
-./registry_com_alt.sh $registyHostName $registyPortNum $registyListeningPortNum &
+./registry_com_alt.sh $registryHostName $registryPortNum $registryListeningPortNum &
 cd ..
 sleep 2
 
 printf "\nStarting Repository ...\n"
-cd dir_repositorySide/
-./repositorySide_com_alt.sh $registyHostName $registyPortNum $repositoryPortNum $nPlayers $nPlayersPushing &
+cd dir_RepoSide/
+./repoSide_com_alt.sh $registryHostName $registryPortNum $repositoryPortNum $nPlayers $nPlayersPushing &
 cd ..
 sleep 2
 
 printf "\nStarting Bench ...\n"
 cd dir_BenchSide/
-./benchSide_com_alt.sh $registyHostName $registyPortNum $benchPortNum $nPlayers &
+./benchSide_com_alt.sh $registryHostName $registryPortNum $benchPortNum $nPlayers &
 cd ..
 sleep 2
 
 printf "\nStarting Playground ...\n"
 cd dir_PlaygroundSide/
-./playgroundSide_com_alt.sh $registyHostName $registyPortNum $playgPortNum $nPlayers &
+./playgroundSide_com_alt.sh $registryHostName $registryPortNum $playgPortNum $nPlayers &
 cd ..
 sleep 2
 
 printf "\nStarting RefSite ...\n"
 cd dir_RefSiteSide/
-./refSiteSide_com_alt.sh $registyHostName $registyPortNum $refSitePortNum $nPlayers &
+./refSiteSide_com_alt.sh $registryHostName $registryPortNum $refSitePortNum $nPlayers &
 cd ..
 sleep 2
 
 printf "\nStarting Referee ...\n"
 cd dir_RefereeSide/
-./refereeSideSide_com_alt.sh $registyHostName $registyPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
+./refereeSide_com_alt.sh $registryHostName $registryPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
 cd ..
 sleep 2
 
 printf "\nStarting Coaches ...\n"
 cd dir_CoachSide/
-./coachSide_com_alt.sh $registyHostName $registyPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
+./coachSide_com_alt.sh $registryHostName $registryPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
 cd ..
 sleep 2
 
 printf "\nStarting Contestants ...\n"
 cd dir_ContestantSide/
-./contestantSide_com_alt.sh $registyHostName $registyPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
+./contestantSide_com_alt.sh $registryHostName $registryPortNum $nPlayers $nPlayersPushing $nTrials $nGames $knockDiff &
 cd ..
 sleep 2
 

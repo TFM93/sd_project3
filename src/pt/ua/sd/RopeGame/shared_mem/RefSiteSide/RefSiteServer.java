@@ -99,12 +99,16 @@ public class RefSiteServer {
         System.out.println("Referee Site object was registered!");
 
         // Wait for shop to terminate
-        while (!refsite.isClosed()) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                break;
+        try {
+            while (!refsite.isClosed()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    break;
+                }
             }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         System.out.println("RefereeSite terminated!");

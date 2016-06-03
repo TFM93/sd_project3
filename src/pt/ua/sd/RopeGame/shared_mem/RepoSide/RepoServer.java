@@ -99,12 +99,16 @@ public class RepoServer {
         System.out.println("Repository object was registered!");
 
         // Wait for shop to terminate
-        while (!repo.isClosed()) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                break;
+        try {
+            while (!repo.isClosed()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    break;
+                }
             }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Repository terminated!");

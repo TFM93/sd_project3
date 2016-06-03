@@ -13,7 +13,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class PlaygroundServer {
     public static void main(String[] args){
-        if (args.length != 3) {
+        if (args.length < 4) {
             System.out.println("Usage: <registry host name> <registry port number> <listening port> <number of players per team>");
             System.exit(0);
         }
@@ -97,12 +97,16 @@ public class PlaygroundServer {
         System.out.println("Playground object was registered!");
 
         // Wait for shop to terminate
-        while (!playground.isClosed()) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                break;
+        try {
+            while (!playground.isClosed()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    break;
+                }
             }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Playground terminated!");

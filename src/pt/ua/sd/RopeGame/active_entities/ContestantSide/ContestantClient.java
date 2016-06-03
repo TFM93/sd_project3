@@ -32,6 +32,9 @@ public class ContestantClient {
         int knockdif = Integer.parseInt(args[6]);
         int nEntities = 6 + (2*n_players);
 
+        System.out.println(n_players);
+        System.out.println(n_players_pushing);
+
         /*  fetch remote object  */
         String nameEntryBench = "Bench";
         String nameEntryPlayground = "Playground";
@@ -110,15 +113,15 @@ public class ContestantClient {
         Random rn = new Random();
 
         /*  get nContestants from configuration  */
-        int nContestants = 3;
+        //int nContestants = 3;
 
 
         /*  instantiate the contestants  */
-        Contestant[] contestants1 = new Contestant[nContestants];  // Contestants array
-        Contestant[] contestants2 = new Contestant[nContestants];  // Contestants array
+        Contestant[] contestants1 = new Contestant[n_players];  // Contestants array
+        Contestant[] contestants2 = new Contestant[n_players];  // Contestants array
 
         /*  create the contestants  */
-        for (int i = 0; i < nContestants; i++) {
+        for (int i = 0; i < n_players; i++) {
             contestants1[i] = new Contestant(i, 1, rn.nextInt(20 - 10 + 1) + 10,
                     playground,
                     refSite,
@@ -141,20 +144,20 @@ public class ContestantClient {
                     n_trials,
                     n_games,
                     knockdif,
-                    i+4+nContestants,
+                    i+4+n_players,
                     nEntities);
-            System.out.printf("VECTORS:contestant team 1 %d, contestant team 2 %d",i+4,i+4+nContestants);
+            System.out.printf("VECTORS:contestant team 1 %d, contestant team 2 %d",i+4,i+4+n_players);
         }
 
         /*  start simulation  */
-        for (int i = 0; i < nContestants; i++) {
+        for (int i = 0; i < n_players; i++) {
             contestants1[i].start();
             contestants2[i].start();
             System.out.println("Contestant  " + i + " started!");
         }
 
         // Wait for end of the simulation
-        for (int i = 0; i < nContestants; i++) {
+        for (int i = 0; i < n_players; i++) {
             try {
                 contestants1[i].join();
                 contestants2[i].join();

@@ -48,6 +48,8 @@ public class MPlayground implements PlaygroundInterface {
     public MPlayground(int nEntities){
 
         localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+        this.ready_to_push=0;
+        this.push_at_all_force=false;
     }
 
     /**
@@ -94,15 +96,18 @@ public class MPlayground implements PlaygroundInterface {
 
         /*  sleep only if the 6 players have not yet arrived and the push flag is not true  */
         /*  the flag is only set to false by the last player to finish pushing  */
+        System.out.println(n_players_pushing);
+        System.out.println(this.ready_to_push);
         if (this.ready_to_push >= n_players_pushing * 2 && !this.push_at_all_force){
             this.ready_to_push = 0;
             this.push_at_all_force = true;
+            System.out.println(this.push_at_all_force);
             center_rope=0;//reset center of rope
             notifyAll();
         }
-
         while (!this.push_at_all_force){
             try {
+                System.out.println("wait inside");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -124,8 +129,6 @@ public class MPlayground implements PlaygroundInterface {
                 this.finished_pushing = 0;
                 this.push_at_all_force = false;
             }
-            return new Bundle(localVectorTimestamp.clone());
-
         }
         else if (team_id == 2){
             center_rope += strenght;//positive value for push to the right
@@ -142,8 +145,6 @@ public class MPlayground implements PlaygroundInterface {
                 this.finished_pushing = 0;
                 this.push_at_all_force = false;
             }
-
-            return new Bundle(localVectorTimestamp.clone());
 
         }
         return new Bundle(localVectorTimestamp.clone());
@@ -214,7 +215,7 @@ public class MPlayground implements PlaygroundInterface {
             decision=true;
         }
 
-        return new Bundle(localVectorTimestamp.clone(),new TrialStat(decision,winner, decision_type, center_rope));
+        return new Bundle(localVectorTimestamp.clone(),new TrialStat(decision,winner, decision_type.ordinal(), center_rope));
     }
 
     /**
@@ -277,7 +278,7 @@ public class MPlayground implements PlaygroundInterface {
         //Todo - implement
     }
 
-    public boolean isClosed() {
+    public boolean isClosed() throws RemoteException{
         return false;
         //Todo - implement
     }

@@ -9,11 +9,13 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 
 public class CoachClient {
 
     public static void main(String[] args) {
-        if (args.length != 7) {
+        if (args.length < 7) {
+            System.out.println("args: " + Arrays.toString(args));
             System.out.println("Usage: <registry host> <registry port> "
                     + "<number of players> <number of players pushing> <number of trials> <number of games> <knockout differential>");
             System.exit(0);

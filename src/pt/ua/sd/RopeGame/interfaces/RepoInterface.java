@@ -22,6 +22,6 @@ public interface RepoInterface extends Remote{
     void contestantLog(int id, int team_id, int strength, ContestantState state, VectorTimestamp vectorTimestamp)throws RemoteException;
     void terminate() throws RemoteException;
 
-    boolean isClosed();
+    boolean isClosed() throws RemoteException;
 
 }

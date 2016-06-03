@@ -57,6 +57,7 @@ public class MGeneralInfoRepo implements RepoInterface{
     private static File OUTPUT_FILE_ORDERED;//represents the log file
     private String TO_WRITE;//info that needs to be saved to file
     private static Writer output=null;
+    private static Writer output2=null;
 
     private static int[] contestants_team1;
     private static int[] contestants_team2;
@@ -485,23 +486,24 @@ public class MGeneralInfoRepo implements RepoInterface{
     private void writeToFileOrdered() {
 
         try {
-            output = new BufferedWriter(new FileWriter(OUTPUT_FILE,true));
+            output2 = new BufferedWriter(new FileWriter(OUTPUT_FILE_ORDERED,true));
             //FileWriter always assumes default encoding is OK!
-            output.write("                               Game of the Rope - Description of the internal state" +
+            output2.write("                               Game of the Rope - Description of the internal state" +
                     "\n\n" +
                     "Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5     Trial    \n" +
                     "Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS\n");
 
+            mySort();
             for (logLine aStatesList : statesList) {
 
-                output.write(aStatesList.getMessage());
+                output2.write(aStatesList.getMessage());
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (output != null) try {
-                output.close();
+            if (output2 != null) try {
+                output2.close();
             } catch (IOException ignore) {}
         }
     }
@@ -547,7 +549,7 @@ public class MGeneralInfoRepo implements RepoInterface{
         //Todo - implement
     }
 
-    public boolean isClosed() {
+    public boolean isClosed() throws RemoteException{
         return false;
         //Todo - implement
     }

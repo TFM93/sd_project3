@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-java -Djava.rmi.server.codebase=$9\
+java -Djava.rmi.server.codebase=$8\
      -Djava.rmi.server.useCodebaseOnly=true\
      -Djava.security.policy=java.policy\
-     pt.ua.sd.RopeGame.active_entities.ContestantSide.ContestantClient $1 $2 $3 $4 $5 $6 $7 $8
+     pt.ua.sd.RopeGame.active_entities.ContestantSide.ContestantClient $1 $2 $3 $4 $5 $6 $7 
