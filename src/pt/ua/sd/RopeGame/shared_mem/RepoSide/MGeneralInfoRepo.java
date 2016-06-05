@@ -4,7 +4,6 @@ import pt.ua.sd.RopeGame.enums.CoachState;
 import pt.ua.sd.RopeGame.enums.ContestantState;
 import pt.ua.sd.RopeGame.enums.RefState;
 import pt.ua.sd.RopeGame.enums.WonType;
-import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
 import pt.ua.sd.RopeGame.interfaces.RepoInterface;
 
