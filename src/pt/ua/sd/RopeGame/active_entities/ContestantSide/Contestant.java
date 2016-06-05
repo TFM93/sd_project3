@@ -9,17 +9,16 @@ import pt.ua.sd.RopeGame.interfaces.*;
 
 import java.rmi.RemoteException;
 
-
 /**
  * Contestant thread<br>
- *<b><center><font size=6>Contestant thread</font></center></b><br>
- *     <font size=4>This class represents the thread of the contestant, his life cycle ends when
- *     the internal flag match_not_over takes the false notation.</font>
+ *     This class represents the thread of the contestant, his life cycle ends when
+ *     the internal flag match_not_over takes the false notation.
  *     Notes:
- *     -> the access to the shared memories is limited by the interfaces present in the interfaces package.
- *     -> the default state is SEAT_AT_THE_BENCH
+ *     - the access to the shared memories is limited by the interfaces present in the interfaces package.
+ *     - the default state is SEAT_AT_THE_BENCH
  *
- *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 public class Contestant extends Thread {
 
@@ -47,9 +46,10 @@ public class Contestant extends Thread {
      * @param team_id current team id
      * @param strength strengt of current player
      * @param playground playground shared memory instancy
-     * @param referee_site referee site shared memory instancy
      * @param contestants_bench contestants bench shared memory instancy
      * @param repo general info repository shared memory instancy
+     * @param n_players number of players per team
+     * @param n_players_pushing number of players pushing the rope
      */
     public Contestant(int id, int team_id, int strength,
                       PlaygroundInterface playground,

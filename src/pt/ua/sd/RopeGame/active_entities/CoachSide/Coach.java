@@ -9,15 +9,15 @@ import java.rmi.RemoteException;
 
 /**
  * Coach thread<br>
- *<b><center><font size=6>Coach thread</font></center></b><br>
- *     <font size=4>This class represents the thread of the coach, her life cycle ends when
- *     the internal flag match_not_over takes the false notation.</font>
+ *     This class represents the thread of the coach, her life cycle ends when
+ *     the internal flag match_not_over takes the false notation.
  *     Notes:
- *     -> the access to the shared memories is limited by the interfaces present in the interfaces package.
- *     -> the default selected team to play is the first 3 contestants (id: 0,1 and 2).
- *     -> the default state is WAIT_FOR_REFEREE_COMMAND
+ *     - the access to the shared memories is limited by the interfaces present in the interfaces package.
+ *     - the default selected team to play is the first 3 contestants (id: 0,1 and 2).
+ *     - the default state is WAIT_FOR_REFEREE_COMMAND
  *
- *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 
 public class Coach extends Thread {
@@ -45,9 +45,10 @@ public class Coach extends Thread {
      * @param id current coach id
      * @param team_id current team id
      * @param playground playground shared memory instancy
-     * @param referee_site referee site shared memory instancy
      * @param contestants_bench contestants bench shared memory instancy
      * @param repo general info repository shared memory instancy
+     * @param n_players number of players per team
+     * @param n_players_pushing number of players pushing the rope
      */
     public Coach(int id, int team_id, PlaygroundInterface playground, RefereeSiteInterface referee_site,
                  BenchInterface contestants_bench, RepoInterface repo, int n_players, int n_players_pushing,

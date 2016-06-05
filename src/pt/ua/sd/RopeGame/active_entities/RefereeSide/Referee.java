@@ -15,14 +15,14 @@ import java.util.Arrays;
 
 /**
  * Referee thread<br>
- *<b><center><font size=6>Referee thread</font></center></b><br>
- *     <font size=4>This class represents the thread of the referee, his life cycle ends when
- *     the internal flag MATCH_ENDED takes the positive notation.</font>
+ *     This class represents the thread of the referee, his life cycle ends when
+ *     the internal flag MATCH_ENDED takes the positive notation.
  *     Notes:
- *     -> the access to the shared memories is limited by the interfaces present in the interfaces package.
- *     -> the default state is START_OF_THE_MATCH
+ *     - the access to the shared memories is limited by the interfaces present in the interfaces package.
+ *     - the default state is START_OF_THE_MATCH
  *
- *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 public class Referee extends Thread {
     /**
@@ -48,6 +48,9 @@ public class Referee extends Thread {
      * @param referee_site referee site shared memory instancy
      * @param contestants_bench contestants bench shared memory instancy
      * @param repo general info repository shared memory instancy
+     * @param n_players_pushing number of players pushing the rope
+     * @param n_games number of games
+     * @param knockDif knockout difference
      */
     public Referee(PlaygroundInterface playground,
                    RefereeSiteInterface referee_site,
