@@ -119,7 +119,7 @@ public class RefereeClient {
                 n_trials,
                 n_games,
                 knockdif,
-                1,
+                0,
                 nEntities);  // Customers array
 
 

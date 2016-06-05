@@ -132,7 +132,7 @@ public class ContestantClient {
                     n_trials,
                     n_games,
                     knockdif,
-                    i+4,
+                    i+3,
                     nEntities);
             contestants2[i] = new Contestant(i, 2, rn.nextInt(20 - 10 + 1) + 10,
                     playground,
@@ -144,7 +144,7 @@ public class ContestantClient {
                     n_trials,
                     n_games,
                     knockdif,
-                    i+4+n_players,
+                    i+3+n_players,
                     nEntities);
             System.out.printf("VECTORS:contestant team 1 %d, contestant team 2 %d",i+4,i+4+n_players);
         }

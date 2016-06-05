@@ -121,7 +121,7 @@ public class CoachClient {
                 n_trials,
                 n_games,
                 knockdif,
-                2,
+                1,
                 nEntities);  // Customers array
         Coach coach2 = new Coach(1, 2, playground,
                 refSite,
@@ -132,7 +132,7 @@ public class CoachClient {
                 n_trials,
                 n_games,
                 knockdif,
-                3,
+                2,
                 nEntities);  // Customers array
 
 
