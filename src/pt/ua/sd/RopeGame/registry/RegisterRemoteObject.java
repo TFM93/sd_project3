@@ -37,8 +37,6 @@ public class RegisterRemoteObject implements Register {
      */
     public RegisterRemoteObject(String rmiRegHostName, int rmiRegPortNumb) {
 
-        System.setProperty("java.rmi.server.hostname",rmiRegHostName);
-
         if ((rmiRegHostName == null) || ("".equals(rmiRegHostName))) {
             throw new NullPointerException("RegisterRemoteObject: null pointer parameter on instantiation!");
         }
