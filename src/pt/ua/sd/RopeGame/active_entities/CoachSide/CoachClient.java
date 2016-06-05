@@ -105,13 +105,7 @@ public class CoachClient {
             System.exit(1);
         }
 
-
-        /*  get nContestants from configuration  */
-        int nContestants = 3;
-
-
         /*  instantiate the contestants  */
-        /*  ARRANJAR VECTOR TIMESTAMP ID!!!!!!!!!!!!  */
         Coach coach1 = new Coach(0, 1, playground,
                 refSite,
                 bench,

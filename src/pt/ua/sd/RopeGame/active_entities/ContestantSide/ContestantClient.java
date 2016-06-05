@@ -112,9 +112,6 @@ public class ContestantClient {
 
         Random rn = new Random();
 
-        /*  get nContestants from configuration  */
-        //int nContestants = 3;
-
 
         /*  instantiate the contestants  */
         Contestant[] contestants1 = new Contestant[n_players];  // Contestants array
