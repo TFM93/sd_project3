@@ -75,7 +75,7 @@ public class Coach extends Thread {
 
         CoachState state = CoachState.WAIT_FOR_REFEREE_COMMAND;//initial state
         try {
-            repo.coachLog(this.team_id, state, vectorTimestamp);//update repo
+            repo.coachLog(this.team_id, state, getVectorTimestamp());//update repo
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class Coach extends Thread {
                         }
                     }
                     try {
-                        bundle = this.contestants_bench.callContestants(this.team_id,this.team_selected_contestants, n_players, vectorTimestamp);
+                        bundle = this.contestants_bench.callContestants(this.team_id,this.team_selected_contestants, n_players, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                         match_not_over = (boolean) bundle.getValue();
                     } catch (RemoteException e) {
@@ -101,28 +101,28 @@ public class Coach extends Thread {
 
                     state = CoachState.ASSEMBLE_TEAM;//change state
                     try {
-                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                        repo.coachLog(this.team_id, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     break;
                 case ASSEMBLE_TEAM:
                     try {
-                        bundle = this.contestants_bench.informReferee(vectorTimestamp);
+                        bundle = this.contestants_bench.informReferee(getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     state = CoachState.WATCH_TRIAL;
                     try {
-                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                        repo.coachLog(this.team_id, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     break;
                 case WATCH_TRIAL:
                     try {
-                        bundle = this.playground.reviewNotes(this.team_selected_contestants, n_players, n_players_pushing, vectorTimestamp);
+                        bundle = this.playground.reviewNotes(this.team_selected_contestants, n_players, n_players_pushing, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                         this.team_selected_contestants = (int[]) bundle.getValue();
                     } catch (RemoteException e) {
@@ -130,7 +130,7 @@ public class Coach extends Thread {
                     }
                     state = CoachState.WAIT_FOR_REFEREE_COMMAND;
                     try {
-                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                        repo.coachLog(this.team_id, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -138,7 +138,7 @@ public class Coach extends Thread {
                 default:
                     state= CoachState.WAIT_FOR_REFEREE_COMMAND;//default state
                     try {
-                        repo.coachLog(this.team_id, state, vectorTimestamp);//update central info repository
+                        repo.coachLog(this.team_id, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -171,6 +171,18 @@ public class Coach extends Thread {
      */
     public int[] getSelectedContestants(){
         return this.team_selected_contestants;
+    }
+
+    /**
+     * Gets an incremented Coach timestamp vector.
+     */
+    private VectorTimestamp getVectorTimestamp() {
+
+        /* Increment vector */
+        vectorTimestamp.incrementVectorTimestamp();
+
+        /* Return vector timestamp */
+        return vectorTimestamp.clone();
     }
 
 }

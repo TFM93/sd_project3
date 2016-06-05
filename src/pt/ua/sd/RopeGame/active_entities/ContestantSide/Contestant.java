@@ -91,12 +91,12 @@ public class Contestant extends Thread {
 
                 case SEAT_AT_THE_BENCH:
                     try {
-                        repo.updtRopeCenter(Integer.MAX_VALUE, vectorTimestamp);//update central info repository the MAX_VALUE hides the log value
+                        repo.updtRopeCenter(Integer.MAX_VALUE, getVectorTimestamp());//update central info repository the MAX_VALUE hides the log value
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     try {
-                        bundle = contestants_bench.followCoachAdvice(this.id,this.strength,this.team_id, this.n_players, this.n_players_pushing, vectorTimestamp);
+                        bundle = contestants_bench.followCoachAdvice(this.id,this.strength,this.team_id, this.n_players, this.n_players_pushing, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                         unpack = (boolean[]) bundle.getValue();
                         match_not_over = unpack[0];
@@ -113,7 +113,7 @@ public class Contestant extends Thread {
 
                     state = ContestantState.STAND_IN_POSITION;//change state
                     try {
-                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -121,14 +121,14 @@ public class Contestant extends Thread {
                 case STAND_IN_POSITION:
                     try {
                         System.out.println("getReady");
-                        bundle = contestants_bench.getReady(n_players_pushing, vectorTimestamp);
+                        bundle = contestants_bench.getReady(n_players_pushing, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     state = ContestantState.DO_YOUR_BEST;//change state
                     try {
-                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -137,7 +137,7 @@ public class Contestant extends Thread {
                     System.out.println("changed state to do your best");
                     try {
                         System.out.println("pull the rope");
-                        bundle = playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, vectorTimestamp);
+                        bundle = playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, getVectorTimestamp());
                         System.out.println("pull the rope AFTER");
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
 
@@ -145,12 +145,12 @@ public class Contestant extends Thread {
                         e.printStackTrace();
                     }
                     try {
-                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
                     try {
-                        bundle = playground.iAmDone(n_players_pushing, vectorTimestamp);
+                        bundle = playground.iAmDone(n_players_pushing, getVectorTimestamp());
                         System.out.println("iAmDone");
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
@@ -158,7 +158,7 @@ public class Contestant extends Thread {
                     }
                     decrementStrength();//depois de am done decrementar a forca
                     try {
-                        bundle = playground.seatDown(n_players_pushing, vectorTimestamp);
+                        bundle = playground.seatDown(n_players_pushing, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -168,7 +168,7 @@ public class Contestant extends Thread {
                 default:
                     state = ContestantState.SEAT_AT_THE_BENCH;//change state
                     try {
-                        repo.contestantLog(this.id, this.team_id, this.strength, state, vectorTimestamp);//update central info repository
+                        repo.contestantLog(this.id, this.team_id, this.strength, state, getVectorTimestamp());//update central info repository
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -217,5 +217,18 @@ public class Contestant extends Thread {
      */
     public void incrementStrength() {
         this.strength++;
+    }
+
+
+    /**
+     * Gets an incremented Contestant timestamp vector.
+     */
+    private VectorTimestamp getVectorTimestamp() {
+
+        /* Increment vector */
+        vectorTimestamp.incrementVectorTimestamp();
+
+        /* Return vector timestamp */
+        return vectorTimestamp.clone();
     }
 }
