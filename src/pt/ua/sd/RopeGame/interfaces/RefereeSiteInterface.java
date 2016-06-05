@@ -33,7 +33,6 @@ public interface RefereeSiteInterface extends Remote {
 
     /**
      * Signals Shop to terminate.
-     * @return bundle with a vector timestamp
      * @throws RemoteException
      */
     void terminate() throws RemoteException;
