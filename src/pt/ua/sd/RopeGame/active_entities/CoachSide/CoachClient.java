@@ -156,6 +156,7 @@ public class CoachClient {
             }
 
             System.out.println("Coach " + coach1.getTeam_id() + " terminated!");
+            System.out.println("Coach " + coach2.getTeam_id() + " terminated!");
 
     }
 }

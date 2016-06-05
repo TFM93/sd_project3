@@ -47,7 +47,7 @@ public class MPlayground implements PlaygroundInterface {
 
     public MPlayground(int nEntities){
 
-        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+        localVectorTimestamp = new VectorTimestamp(nEntities-2,nEntities);
         this.ready_to_push=0;
         this.push_at_all_force=false;
     }
@@ -96,18 +96,14 @@ public class MPlayground implements PlaygroundInterface {
 
         /*  sleep only if the 6 players have not yet arrived and the push flag is not true  */
         /*  the flag is only set to false by the last player to finish pushing  */
-        System.out.println(n_players_pushing);
-        System.out.println(this.ready_to_push);
         if (this.ready_to_push >= n_players_pushing * 2 && !this.push_at_all_force){
             this.ready_to_push = 0;
             this.push_at_all_force = true;
-            System.out.println(this.push_at_all_force);
             center_rope=0;//reset center of rope
             notifyAll();
         }
         while (!this.push_at_all_force){
             try {
-                System.out.println("wait inside");
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -283,6 +279,7 @@ public class MPlayground implements PlaygroundInterface {
         //Todo - implement
     }
     private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.incrementVectorTimestamp();
         localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
 
     }

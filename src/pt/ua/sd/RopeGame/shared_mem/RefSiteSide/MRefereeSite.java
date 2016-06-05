@@ -25,7 +25,7 @@ public class MRefereeSite implements RefereeSiteInterface{
     private final VectorTimestamp localVectorTimestamp;
 
     public MRefereeSite(int nEntities){
-        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+        localVectorTimestamp = new VectorTimestamp(nEntities-3,nEntities);
     }
 
     /**
@@ -50,7 +50,6 @@ public class MRefereeSite implements RefereeSiteInterface{
      */
     public synchronized Bundle announceNewGame(VectorTimestamp vectorTimestamp) throws RemoteException {
         updVectorTimestamp(vectorTimestamp);//update vector
-
         return new Bundle(localVectorTimestamp.clone());
     }
 
@@ -96,6 +95,7 @@ public class MRefereeSite implements RefereeSiteInterface{
     }
 
     private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.incrementVectorTimestamp();
         localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
 
     }

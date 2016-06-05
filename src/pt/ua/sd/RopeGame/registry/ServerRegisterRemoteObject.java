@@ -22,11 +22,12 @@ public class ServerRegisterRemoteObject {
             System.out.println("Usage: <registry host name> <registry port number> <port> ");
             System.exit(0);
         }
-        
+
         /* get location of the generic registry service */
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);
+        System.setProperty("java.rmi.server.hostname",rmiRegHostName);
 
         /* create and install the security manager */
         if (System.getSecurityManager() == null) {

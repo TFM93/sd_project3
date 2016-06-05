@@ -10,6 +10,7 @@ import pt.ua.sd.RopeGame.structures.GameStat;
 import pt.ua.sd.RopeGame.structures.TrialStat;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 
 /**
@@ -95,7 +96,9 @@ public class Referee extends Thread {
                 case START_OF_THE_MATCH:
                     try {
                         bundle = this.referee_site.announceNewGame(getVectorTimestamp());
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -129,7 +132,9 @@ public class Referee extends Thread {
                     knock_out=-1;
                     try {
                         bundle = this.contestants_bench.callTrial(getVectorTimestamp());
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -143,6 +148,7 @@ public class Referee extends Thread {
                 case TEAMS_READY:
                     try {
                         bundle = this.contestants_bench.startTrial(getVectorTimestamp());
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -166,7 +172,10 @@ public class Referee extends Thread {
                     GameStat game_result=null;
                     try {
                         bundle = this.playground.assertTrialDecision(n_players_pushing, knockDif, getVectorTimestamp());
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
+
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                         unpack = (TrialStat) bundle.getValue();
                         has_next_trial = unpack.isHas_next_trial();
                         wt = WonType.values()[unpack.getWonType()];
@@ -200,8 +209,10 @@ public class Referee extends Thread {
                         if (has_next_trial) {
                             this.repo.updtRopeCenter(Integer.MAX_VALUE, getVectorTimestamp());//MAX_VALUE hides/resets the rope center in the log
                             bundle = this.contestants_bench.callTrial(getVectorTimestamp());//new trial
+                            System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                             vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
-                        /*  when new trial is called, increment trial number  */
+                            System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
+                            /*  when new trial is called, increment trial number  */
                             trial_number += 1;//increase nr of trials
                             state = RefState.TEAMS_READY;//change state
                         }
@@ -209,7 +220,10 @@ public class Referee extends Thread {
                         else{
 
                             bundle=this.referee_site.declareGameWinner(score_T1, score_T2, knock_out, n_games, getVectorTimestamp());
+
+                            System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                             vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                            System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                             game_result = (GameStat) bundle.getValue();
                             if(game_result.getWinnerTeam() == 1)
                             {
@@ -243,11 +257,15 @@ public class Referee extends Thread {
                     int n_games_referee;
                     try {
                         bundle = this.referee_site.getN_games_played(getVectorTimestamp());
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                         n_games_referee = (int) bundle.getValue();
                         if(n_games > n_games_referee){//if less than 3 games played
                             bundle = this.referee_site.announceNewGame(getVectorTimestamp());//new game announced
+                            System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                             vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                            System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                             repo.updGame_nr(getVectorTimestamp());//updte the nr of games in central info repo
                             state = RefState.START_OF_A_GAME;
                             repo.refereeLog(state, trial_number, getVectorTimestamp());//update the referee state in central info repo
@@ -257,7 +275,9 @@ public class Referee extends Thread {
                         }
                         state = RefState.END_OF_A_MATCH;
                         bundle = this.contestants_bench.declareMatchWinner(gamesWon_T1,gamesWon_T2, getVectorTimestamp());//declaring the match winner
+                        System.out.println("Received: " + Arrays.toString(bundle.getVectorTimestamp().getVectorTimestampArray()));
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
+                        System.out.println("UPDATED: " + Arrays.toString(vectorTimestamp.getVectorTimestampArray()));
                         int match_winner = (int) bundle.getValue();
                         repo.refereeLog(state, trial_number, getVectorTimestamp());//update the referee state in central info repo
                         repo.printMatchResult(match_winner,gamesWon_T1,gamesWon_T2, getVectorTimestamp());//update the centrla info repo with the winner of the match

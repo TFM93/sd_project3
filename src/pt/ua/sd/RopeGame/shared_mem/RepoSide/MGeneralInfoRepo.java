@@ -280,7 +280,6 @@ public class MGeneralInfoRepo implements RepoInterface{
 
         writeToFile();//writes the text present in buffer
         //this function is called on the end so now we can order the timestamps and print the messages
-        mySort();
         writeToFileOrdered();
         //return new Bundle(vectorTimestamp);
 
@@ -496,7 +495,7 @@ public class MGeneralInfoRepo implements RepoInterface{
             mySort();
             for (logLine aStatesList : statesList) {
 
-                output2.write(aStatesList.getMessage());
+                output2.write(aStatesList.getMessage() + "  VECTOR:" +Arrays.toString( aStatesList.getVectorTimestamp()) +"\n");
             }
 
         } catch (IOException e) {
@@ -558,10 +557,9 @@ public class MGeneralInfoRepo implements RepoInterface{
      * Bubble Sort.
      */
     private void mySort() {
-
+        System.out.println("mySort:Start");
         boolean swap = true;
         int f = statesList.size() - 1;
-
         while (swap) {
             swap = false;
 
@@ -571,9 +569,8 @@ public class MGeneralInfoRepo implements RepoInterface{
                 int[] array2 = statesList.get(i+1).getVectorTimestamp();
                 int cont1 = 0;
                 int cont2 = 0;
-
                 for (int j=0 ; j<array1.length ; j++) {
-
+                    //System.out.println("mySort:loopInsideloop: index: " + j + " array1:" + array1[j] + " array2:" + array2[j]);
                     if (array1[j] > array2[j]) {
                         cont1++;
                     } else if (array1[j] < array2[j]) {
@@ -582,9 +579,10 @@ public class MGeneralInfoRepo implements RepoInterface{
                 }
 
                 if (cont1 > cont2) {
+                    System.out.println("mySort:Swap execution");
                     Collections.swap(statesList, i, i+1);
+                    swap=true;
                 }
-
                 f--;
             }
 

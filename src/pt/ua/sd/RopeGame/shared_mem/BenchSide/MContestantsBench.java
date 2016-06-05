@@ -69,7 +69,7 @@ public class MContestantsBench implements BenchInterface {
     private final VectorTimestamp localVectorTimestamp;
 
     public MContestantsBench(int nEntities){
-        localVectorTimestamp = new VectorTimestamp(-1,nEntities);
+        localVectorTimestamp = new VectorTimestamp(nEntities-1,nEntities);
     }
 
     /**
@@ -471,6 +471,7 @@ public class MContestantsBench implements BenchInterface {
     }
 
     private synchronized void updVectorTimestamp(VectorTimestamp receivedVector) throws RemoteException{
+        localVectorTimestamp.incrementVectorTimestamp();
         localVectorTimestamp.updateVectorTimestamp(receivedVector);//update vector
 
     }

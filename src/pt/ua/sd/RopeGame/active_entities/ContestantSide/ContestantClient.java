@@ -146,7 +146,6 @@ public class ContestantClient {
                     knockdif,
                     i+3+n_players,
                     nEntities);
-            System.out.printf("VECTORS:contestant team 1 %d, contestant team 2 %d",i+4,i+4+n_players);
         }
 
         /*  start simulation  */

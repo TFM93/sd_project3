@@ -120,7 +120,6 @@ public class Contestant extends Thread {
                     break;
                 case STAND_IN_POSITION:
                     try {
-                        System.out.println("getReady");
                         bundle = contestants_bench.getReady(n_players_pushing, getVectorTimestamp());
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
@@ -134,11 +133,8 @@ public class Contestant extends Thread {
                     }
                     break;
                 case DO_YOUR_BEST:
-                    System.out.println("changed state to do your best");
                     try {
-                        System.out.println("pull the rope");
                         bundle = playground.pullTheRope(this.team_id, this.strength, this.id, n_players_pushing, n_players, getVectorTimestamp());
-                        System.out.println("pull the rope AFTER");
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
 
                     } catch (RemoteException e) {
@@ -151,7 +147,6 @@ public class Contestant extends Thread {
                     }
                     try {
                         bundle = playground.iAmDone(n_players_pushing, getVectorTimestamp());
-                        System.out.println("iAmDone");
                         vectorTimestamp.setVectorTimestamp(bundle.getVectorTimestamp());
                     } catch (RemoteException e) {
                         e.printStackTrace();
