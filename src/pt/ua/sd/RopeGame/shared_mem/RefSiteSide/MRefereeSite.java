@@ -3,9 +3,6 @@ package pt.ua.sd.RopeGame.shared_mem.RefSiteSide;
 import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
-import pt.ua.sd.RopeGame.interfaces.IRefereeSiteCoach;
-import pt.ua.sd.RopeGame.interfaces.IRefereeSiteContestant;
-import pt.ua.sd.RopeGame.interfaces.IRefereeSiteReferee;
 import pt.ua.sd.RopeGame.interfaces.RefereeSiteInterface;
 import pt.ua.sd.RopeGame.structures.GameStat;
 
@@ -13,9 +10,11 @@ import java.rmi.RemoteException;
 
 /**
  * Refereee Site shared memory<br>
- *<b><center><font size=6>Refereee Site shared memory</font></center></b><br>
- *     <font size=4>This class represents the monitor/shared memory of the referee site.</font>
  *
+ *    This class represents the monitor/shared memory of the referee site.
+ *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  *
  */
 public class MRefereeSite implements RefereeSiteInterface{

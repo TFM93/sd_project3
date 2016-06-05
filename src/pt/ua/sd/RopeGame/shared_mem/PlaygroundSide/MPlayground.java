@@ -4,9 +4,6 @@ package pt.ua.sd.RopeGame.shared_mem.PlaygroundSide;
 import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
-import pt.ua.sd.RopeGame.interfaces.IPlaygroundCoach;
-import pt.ua.sd.RopeGame.interfaces.IPlaygroundContestant;
-import pt.ua.sd.RopeGame.interfaces.IPlaygroundReferee;
 import pt.ua.sd.RopeGame.interfaces.PlaygroundInterface;
 import pt.ua.sd.RopeGame.structures.TrialStat;
 

@@ -11,10 +11,10 @@ import java.util.Arrays;
 
 /**
  * Contestant Bench shared memory<br>
- *<b><center><font size=6>Contestant Bench shared memory</font></center></b><br>
- *     <font size=4>This class represents the monitor/shared memory of the contestant bench.</font>
+ *     This class represents the monitor/shared memory of the contestant bench.
  *
- *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 public class MContestantsBench implements BenchInterface {
     //Todo- update vector

@@ -6,9 +6,6 @@ import pt.ua.sd.RopeGame.enums.RefState;
 import pt.ua.sd.RopeGame.enums.WonType;
 import pt.ua.sd.RopeGame.info.Bundle;
 import pt.ua.sd.RopeGame.info.VectorTimestamp;
-import pt.ua.sd.RopeGame.interfaces.IRepoCoach;
-import pt.ua.sd.RopeGame.interfaces.IRepoContestant;
-import pt.ua.sd.RopeGame.interfaces.IRepoReferee;
 import pt.ua.sd.RopeGame.interfaces.RepoInterface;
 
 import java.io.*;
@@ -21,10 +18,10 @@ import java.util.List;
 
 /**
  * Logging repository<br>
- *<b><center><font size=6>Logging repository</font></center></b><br>
- *     <font size=4>This class represents the shared memory for the logging.
- *     The logging file is saved in the root of the project.
- *     Info saved on RopeGame.log
+ *     This class represents the shared memory for the logging.
+ *     The logging file is saved in the defined configuration path.
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 public class MGeneralInfoRepo implements RepoInterface{
 
