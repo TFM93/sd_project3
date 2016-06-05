@@ -27,7 +27,6 @@ public class ServerRegisterRemoteObject {
         String rmiRegHostName = args[0];
         int rmiRegPortNumb = Integer.parseInt(args[1]);
         int listeningPort = Integer.parseInt(args[2]);
-        System.setProperty("java.rmi.server.hostname",rmiRegHostName);
 
         /* create and install the security manager */
         if (System.getSecurityManager() == null) {
