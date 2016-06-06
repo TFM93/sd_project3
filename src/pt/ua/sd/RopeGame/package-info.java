@@ -1,10 +1,7 @@
 /**
  * Rope game simulator
- * <br>Created by tiago and ivosilva on 25-03-2016.
  *
- *<b><center><font size=10>ROPE GAME SIMULATOR</font></center></b><br>
- *
- * <center><font size=5>Concurrent rope game simulation made for Distribucted Systems class, in order to explore concurrency in Java.
+ *Concurrent rope game simulation made for Distribucted Systems class, in order to explore concurrency in Java.
  * An aproximation to the classic game is assumed here.
  * A match is composed of three games and each game
  may take up to six trials. A game win is declared by asserting the position of a mark placed at the middle
@@ -18,12 +15,11 @@
  use this information to substantiate his decision.
  In order to ensure rules compliance, there is a referee. She has full control of the procedure and
  decides when to start a new game or a trial within the game. She also decides when a game is over and
- declares who has won a game or the match.</font></center>
+ declares who has won a game or the match.
  *<br>
- *<b><center><font size=6>Ivo Silva </font></center></b><br>
- *     <b><center><font size=4>ivosilva@ua.pt</font></center></b><br>
- *<b><center><font size=6>Tiago Magalhaes </font></center></b><br>
- *     <b><center><font size=4>tiagoferreiramagalhaes@ua.pt</font></center></b><br>
+ *
+ * @author Ivo Silva (<a href="mailto:ivosilva@ua.pt">ivosilva@ua.pt</a>)
+ * @author Tiago Magalhaes (<a href="mailto:tiagoferreiramagalhaes@ua.pt">tiagoferreiramagalhaes@ua.pt</a>)
  */
 
 
