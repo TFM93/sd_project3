@@ -49,6 +49,8 @@ public class Referee extends Thread {
      * @param n_players_pushing number of players pushing the rope
      * @param n_games number of games
      * @param knockDif knockout difference
+     * @param vectorTimestampId timestamp id
+     * @param nEntities number of entities
      */
     public Referee(PlaygroundInterface playground,
                    RefereeSiteInterface referee_site,
