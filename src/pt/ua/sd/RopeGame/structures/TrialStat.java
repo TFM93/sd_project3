@@ -8,7 +8,6 @@ public class TrialStat implements Serializable{
 
     /**
      * Serialization key
-     * @serialField serialVersionUID
      */
     private static final long serialVersionUID = 200416L;
 

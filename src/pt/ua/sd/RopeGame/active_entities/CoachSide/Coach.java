@@ -29,14 +29,10 @@ public class Coach extends Thread {
     private int team_id;//represents the id of the team
     private int team_selected_contestants[];//each coach has 3 selected contestants to play
     private BenchInterface contestants_bench;//represents the bench shared memory
-    private RefereeSiteInterface referee_site;//represents the referee site shared memory
     private PlaygroundInterface playground;//represents the playground shared memory
     private RepoInterface repo;//represents the general info repository of shared memory
     private int n_players;//number of players in each team, defined in rg.config
     private int n_players_pushing;//number of players in each team pushing at any given trial, defined in rg.config
-    private int n_trials;//number of trials, defined in rg.config
-    private int n_games;//number of games, defined in rg.config
-    private int knockDif;//number of knockout difference needed to win, defined in rg.config
     private final VectorTimestamp vectorTimestamp;
 
 
@@ -49,21 +45,19 @@ public class Coach extends Thread {
      * @param repo general info repository shared memory instancy
      * @param n_players number of players per team
      * @param n_players_pushing number of players pushing the rope
+     * @param vectorTimestampId coach local timestamp id
+     * @param nEntities number of total entities
      */
-    public Coach(int id, int team_id, PlaygroundInterface playground, RefereeSiteInterface referee_site,
+    public Coach(int id, int team_id, PlaygroundInterface playground,
                  BenchInterface contestants_bench, RepoInterface repo, int n_players, int n_players_pushing,
-                 int n_trials, int n_games, int knockDif, int vectorTimestampId, int nEntities) {
+                  int vectorTimestampId, int nEntities) {
         this.id = id;
         this.team_id = team_id;
         this.playground = playground;
-        this.referee_site = referee_site;
         this.contestants_bench = contestants_bench;
         this.repo = repo;
         this.n_players = n_players;
         this.n_players_pushing = n_players_pushing;
-        this.n_trials = n_trials;
-        this.n_games = n_games;
-        this.knockDif = knockDif;
         this.vectorTimestamp = new VectorTimestamp(vectorTimestampId, nEntities);
     }
 
@@ -175,7 +169,8 @@ public class Coach extends Thread {
     }
 
     /**
-     * Gets an incremented Coach timestamp vector.
+     * Gets an incremented Coach timestamp vector
+     * @return vector timestamp already incremented
      */
     private VectorTimestamp getVectorTimestamp() {
 

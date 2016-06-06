@@ -64,7 +64,6 @@ public class MContestantsBench implements BenchInterface {
     private boolean playing2[];
     /**
      * Vector timestamp
-     * @serialField localVectorTimestamp
      */
     private final VectorTimestamp localVectorTimestamp;
 

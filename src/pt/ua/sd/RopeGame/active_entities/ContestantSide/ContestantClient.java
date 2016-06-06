@@ -121,26 +121,18 @@ public class ContestantClient {
         for (int i = 0; i < n_players; i++) {
             contestants1[i] = new Contestant(i, 1, rn.nextInt(20 - 10 + 1) + 10,
                     playground,
-                    refSite,
                     bench,
                     repo,
                     n_players,
                     n_players_pushing,
-                    n_trials,
-                    n_games,
-                    knockdif,
                     i+3,
                     nEntities);
             contestants2[i] = new Contestant(i, 2, rn.nextInt(20 - 10 + 1) + 10,
                     playground,
-                    refSite,
                     bench,
                     repo,
                     n_players,
                     n_players_pushing,
-                    n_trials,
-                    n_games,
-                    knockdif,
                     i+3+n_players,
                     nEntities);
         }

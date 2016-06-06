@@ -311,6 +311,7 @@ public class Referee extends Thread {
 
     /**
      * Gets an incremented Referee timestamp vector.
+     * @return vector timestamp incremented
      */
     private VectorTimestamp getVectorTimestamp() {
 

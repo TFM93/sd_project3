@@ -9,13 +9,12 @@ public class Bundle implements BundleInterface {
 
     /**
      * Vector timestamp
-     * @serialField vectorTimestamp
+     *
      */
     private final VectorTimestamp vectorTimestamp;
     
     /**
      * Value
-     * @serialField value
      */
     private final Object value;
     
