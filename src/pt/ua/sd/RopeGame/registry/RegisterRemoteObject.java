@@ -17,14 +17,12 @@ public class RegisterRemoteObject implements Register {
     /**
      * Name of local host
      *
-     * @serialField rmiRegHostName
      */
     private String rmiRegHostName;
 
     /**
      * Port number where the local registry service is listening
      *
-     * @serialField rmiRegPortNumb
      */
     private int rmiRegPortNumb = 1099;
 

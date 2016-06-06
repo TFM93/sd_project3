@@ -37,7 +37,6 @@ public class MPlayground implements PlaygroundInterface {
     private int n_contestants_done = 0;
     /**
      * local vectorial clock
-     * @serialField localVectorTimestamp
      */
     private VectorTimestamp localVectorTimestamp;
 

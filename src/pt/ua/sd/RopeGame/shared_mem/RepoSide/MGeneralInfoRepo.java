@@ -63,7 +63,6 @@ public class MGeneralInfoRepo implements RepoInterface{
 
     /**
      * States list
-     * @serialField statesList
      */
     private final List<logLine> statesList;
 
@@ -157,8 +156,9 @@ public class MGeneralInfoRepo implements RepoInterface{
     /**
      * Function responsible to add the header to the log
      * @param first if true prints to file only the initial header, if false also prints the game number
+     * @return return temp string to print
      */
-    public synchronized String AddheaderInternal(boolean first)
+    private synchronized String AddheaderInternal(boolean first)
     {
         String temp;//temporary string
 
@@ -406,6 +406,7 @@ public class MGeneralInfoRepo implements RepoInterface{
 
     /**
      * buffers the states in current moment for each entity
+     * @return return temp string to print
      */
     private synchronized String printStates(){
 

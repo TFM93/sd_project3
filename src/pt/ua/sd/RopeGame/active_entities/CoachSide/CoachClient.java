@@ -107,25 +107,17 @@ public class CoachClient {
 
         /*  instantiate the contestants  */
         Coach coach1 = new Coach(0, 1, playground,
-                refSite,
                 bench,
                 repo,
                 n_players,
                 n_players_pushing,
-                n_trials,
-                n_games,
-                knockdif,
                 1,
                 nEntities);  // Customers array
         Coach coach2 = new Coach(1, 2, playground,
-                refSite,
                 bench,
                 repo,
                 n_players,
                 n_players_pushing,
-                n_trials,
-                n_games,
-                knockdif,
                 2,
                 nEntities);  // Customers array
 

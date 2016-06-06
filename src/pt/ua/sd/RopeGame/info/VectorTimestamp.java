@@ -11,13 +11,11 @@ public class VectorTimestamp implements VectorTimestampInterface {
 
     /**
      * Vector timestamp
-     * @serialField vectorTimestamp
      */
     private int[] vectorTimestamp;
     
     /**
      * Vector timestamp id
-     * @serialField vectorTimestampId
      */
     private final int vectorTimestampId;
     

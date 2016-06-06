@@ -19,7 +19,7 @@ import java.rmi.RemoteException;
  */
 public class MRefereeSite implements RefereeSiteInterface{
     /**
-     * @serialField localVectorTimestamp
+     * local vector timestamp
      */
     private final VectorTimestamp localVectorTimestamp;
 
