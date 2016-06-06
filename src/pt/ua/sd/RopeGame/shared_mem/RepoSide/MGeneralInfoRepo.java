@@ -492,7 +492,7 @@ public class MGeneralInfoRepo implements RepoInterface{
             mySort();
             for (logLine aStatesList : statesList) {
 
-                output2.write(aStatesList.getMessage() + "  VECTOR:" +Arrays.toString( aStatesList.getVectorTimestamp()) +"\n");
+                output2.write(aStatesList.getMessage());
             }
 
         } catch (IOException e) {
@@ -554,7 +554,6 @@ public class MGeneralInfoRepo implements RepoInterface{
      * Bubble Sort.
      */
     private void mySort() {
-        System.out.println("mySort:Start");
         boolean swap = true;
         int f = statesList.size() - 1;
         while (swap) {
@@ -576,7 +575,6 @@ public class MGeneralInfoRepo implements RepoInterface{
                 }
 
                 if (cont1 > cont2) {
-                    System.out.println("mySort:Swap execution");
                     Collections.swap(statesList, i, i+1);
                     swap=true;
                 }
